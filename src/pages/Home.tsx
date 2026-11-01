@@ -8,6 +8,7 @@ import { PageHead } from '../components/Chrome';
 import OfficesSection from '../components/OfficesSection';
 import { projectsCsv, downloadText } from '../lib/csv';
 import { count, date, php, phpDelta, plural } from '../lib/format';
+import { NATIONAL_URL, NEP_OVERVIEW_URL } from '../lib/links';
 import { usePortal } from '../lib/portal-context';
 import { summarise, type ScopedProject, type ScopeResult, type Summary } from '../lib/scope';
 import { useTitle } from '../lib/use-title';
@@ -127,6 +128,18 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
+
+      <aside className="source-bridge" aria-label="Explore the national budget context">
+        <div>
+          <strong>How this office fits the national budget</strong>
+          <span>The figures above cover this DPWH office. BetterGov also publishes the nationwide proposal and House comparison.</span>
+        </div>
+        <div className="source-bridge-links">
+          <External href={NEP_OVERVIEW_URL}>2027 NEP</External>
+          <External href={NATIONAL_URL}>House bill vs NEP</External>
+          <Link to="/sources">Sources & context →</Link>
+        </div>
+      </aside>
 
       <ReviewDesk projects={all} summary={summary} source={scope.meta} />
 

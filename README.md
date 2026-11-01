@@ -40,6 +40,7 @@ writes `portal.config.ts`. That file is the only one a fork needs to change.
 | --- | --- |
 | **Projects** (`/`) | The headline figures; the DPWH offices in scope (`#offices`), each with its 2027 figures, tier and status counts, and under it the legislative districts it serves with their representatives (a shared office's money is shown once, never split); the six statuses; and every project with search, filters (program, status, DPWH office, reason), sorting and a CSV download. An office's line count or status opens the list filtered to it. Filters live in the URL, so a filtered list can be shared. |
 | **Budgets 2020–2026** (`/gaa`) | The enacted budgets (GAA) for the same area: each DPWH office's whole budget by year, grouped by Congress, with the 2027 NEP and House bill beside it but apart; the yearly totals of the programs that name the place (click a year to filter); and every such program or project, in any department, with its amount in each year, search, department and year filters, and a CSV download. |
+| **Sources & context** (`/sources`) | Direct links to the office's API query and district page, the national FY2027 NEP and House bill views, the enacted GAA browser, and the comparison methodology. It explains which figures are local and which are nationwide. |
 | **A project** (`/projects/:program/:id`) | The amount in every version with a link to the exact PDF page, how the two versions were matched, notes on the line, and why it is in this portal. |
 | **About the data** (`/about`) | Every question the portal asks the API, for 2027 and for 2020–2026, with counts and a link to check each one, every line removed by hand and why, the source documents, plain-language rules and terms, and the notices. |
 
@@ -160,7 +161,7 @@ src/config.ts         what the config means, and its checks
 src/api/              the API client and the response types it reads
 src/lib/scope.ts      config → the portal's 2027 projects, each with its reasons
 src/lib/gaa.ts        config → the 2020–2026 programs that name the places
-src/pages/            Projects (with offices and their districts), Enacted (2020–2026), Project, About
+src/pages/            Projects (with offices and their districts), Enacted (2020–2026), Project, Sources, About
 src/styles/           theme tokens and layout
 scripts/setup.ts      npm run setup
 scripts/check.ts      npm run check (exits non-zero on a broken config; use it in CI)

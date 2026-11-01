@@ -6,7 +6,7 @@
  *   of the portal's places, with its appropriation in each year.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import type { DistrictCard, DistrictOffice, Envelope } from '../api/types';
 import { GAA_YEARS } from '../api/types';
 import { shortNameOf } from '../config';
@@ -63,6 +63,7 @@ export default function Enacted() {
         <p>
           The General Appropriations Act (GAA) is the budget Congress passes and the President signs each year: the authority to
           spend, not the money spent. These are the budgets for {FIRST} to {LAST}; the 2027 budget is still a bill.
+          {' '}<Link to="/sources">Compare the sources and budget stages →</Link>
         </p>
       </PageHead>
 

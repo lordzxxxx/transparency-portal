@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { KIND_LABELS, shortNameOf } from '../config';
 import { usePortal } from '../lib/portal-context';
 import { date } from '../lib/format';
-import { NATIONAL_URL, SOURCE_CODE_URL } from '../lib/links';
+import { NATIONAL_URL, NEP_OVERVIEW_URL, SOURCE_CODE_URL } from '../lib/links';
 
 const BETTERGOV_LOGO = '/brand/bettergov-horizontal-primary.png';
 
@@ -11,6 +11,7 @@ const NAV = [
   { to: '/', hash: '', label: '2027 projects' },
   { to: '/', hash: '#offices', label: 'Offices and districts' },
   { to: '/gaa', hash: '', label: 'Budgets 2020–2026' },
+  { to: '/sources', hash: '', label: 'Sources & context' },
   { to: '/about', hash: '', label: 'About the data' },
 ];
 
@@ -37,8 +38,8 @@ export function Masthead() {
         <div className="page masthead-top-inner">
           <span className="muted">{today}</span>
           <span className="masthead-links">
-            <a href={NATIONAL_URL} target="_blank" rel="noopener">
-              National picture <span aria-hidden="true">↗</span>
+            <a href={NEP_OVERVIEW_URL} target="_blank" rel="noopener">
+              National NEP <span aria-hidden="true">↗</span>
             </a>
             <a href={`${client.base}/docs`} target="_blank" rel="noopener">
               API <span aria-hidden="true">↗</span>
@@ -116,7 +117,7 @@ export function Footer() {
           </li>
           <li>
             <span className="label">Every project, nationwide</span>
-            <a href={NATIONAL_URL} target="_blank" rel="noopener">budget.bettergov.ph ↗</a>
+            <a href={NATIONAL_URL} target="_blank" rel="noopener">2027 House bill vs NEP ↗</a>
           </li>
           <li>
             <span className="label">Data</span>
