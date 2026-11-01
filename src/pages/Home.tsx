@@ -27,7 +27,7 @@ const SORTS: Record<Sort, { label: string; cmp: (a: ScopedProject, b: ScopedProj
 
 export default function Home() {
   const { scope, overview, config } = usePortal();
-  useTitle(`FY 2027 projects naming ${shortNameOf(config)} · Budget portal`);
+  useTitle(`Every FY 2027 project · ${shortNameOf(config)}`);
   const datasets = overview.status === 'ready' ? overview.value.data.datasets : [];
   return (
     <main className="page main">
@@ -67,7 +67,6 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     return [...byId.values()];
   }, [scope.disclaimers, districts]);
   const name = shortNameOf(config);
-  const placeMatched = (config.scope.places?.length ?? 0) > 0 && !(config.scope.offices?.length ?? 0);
   const all = scope.projects;
   const summary = useMemo(() => summarise(all), [all]);
   const groups = useMemo(() => groupInfo(datasets, all), [datasets, all]);
@@ -153,23 +152,22 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     <>
       <PageHead
         eyebrow={<>FY 2027<span className="sep">·</span>NEP and House Bill 10858<span className="sep">·</span>{name}</>}
-        title={placeMatched ? `${plural(summary.rows, 'project line')} naming ${name} in the FY 2027 proposals` : `${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
+        title={`${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
       >
         <Lede summary={summary} />
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
-      {placeMatched && <p className="fine">This city view selects lines whose titles name Malaybalay in Region X. We excluded {count(scope.excluded.length)} lines whose titles explicitly place the work outside the city; <Link to="/about">each exclusion and its reason is public</Link>. The remaining title matches may still miss city projects or include uncertain locations. These are proposed amounts on selected lines, not a complete city allocation or actual spending.</p>}
       <p className="fine">These counts and totals are calculated from the project rows returned by the BetterGov API. {scope.queries[0] && <External href={scope.queries[0].api}>Check the API query</External>} {scope.queries.length > 1 && <Link to="/about">See every query</Link>} Check individual records and document pages in the ledger below. <Link to="/sources">Source guide →</Link></p>
 
       <nav className="jump-nav" aria-label="Explore this portal">
-        <Link to="/#projects"><strong>Browse {count(summary.rows)} matched project lines</strong><span>Search, filter and open source pages</span></Link>
+        <Link to="/#projects"><strong>Browse all {count(summary.rows)} projects</strong><span>Search, filter and open source pages</span></Link>
         {summary.groups.house_only.rows > 0 ? (
           <Link to="/?status=house_only#projects"><strong>Review {count(summary.groups.house_only.rows)} House bill only lines</strong><span>Comparison candidates to check</span></Link>
         ) : (
           <Link to="/#groups"><strong>Compare project statuses</strong><span>See how the two versions relate</span></Link>
         )}
-        <Link to="/gaa"><strong>View 2020–2026 budgets</strong><span>{placeMatched ? 'Place-name matches and whole district office totals' : 'Whole office totals by year'}</span></Link>
+        <Link to="/gaa"><strong>View 2020–2026 budgets</strong><span>Whole office totals by year</span></Link>
       </nav>
 
       <BetterGovHighlights />
@@ -210,7 +208,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       <section className="section" id="projects" aria-labelledby="list-h">
         <div className="list-head">
           <h2 id="list-h" className="section-h">
-            {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'matched project line')}` : `Matched project lines (${count(all.length)})`}
+            {narrowed ? `${count(filtered.length)} of ${plural(all.length, 'project')}` : `Every project (${count(all.length)})`}
           </h2>
           <button type="button" className="button button-quiet" onClick={() => downloadText(`${config.id}-fy2027-projects.csv`, projectsCsv(filtered))}>
             Download CSV{narrowed ? ` (${count(filtered.length)})` : ''}
@@ -325,8 +323,8 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
 
       <aside className="source-bridge" aria-label="Explore the national budget context">
         <div>
-          <strong>How these local matches fit the national budget</strong>
-          <span>The figures above cover selected project lines naming this place. BetterGov also publishes the nationwide proposal and House comparison.</span>
+          <strong>How this office fits the national budget</strong>
+          <span>The figures above cover this DPWH office. BetterGov also publishes the nationwide proposal and House comparison.</span>
         </div>
         <div className="source-bridge-links">
           <External href={NEP_OVERVIEW_URL}>2027 NEP</External>
@@ -421,7 +419,7 @@ function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; 
           <p className="eyebrow">Start with the source</p>
           <h2 id="review-h" className="section-h">Read the changes, then check the document</h2>
           <p>
-            The House bill lists {plural(summary.groups.house_only.rows, 'line')} absent from this portal’s matched NEP list.
+            The House bill lists {plural(summary.groups.house_only.rows, 'line')} absent from this office’s NEP list.
             These are comparison candidates, not confirmed insertions or findings of wrongdoing.
             Open a project to see both versions, its status notes, and the exact budget pages.
           </p>
@@ -435,7 +433,7 @@ function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; 
       </div>
       {candidates.length > 0 && (
         <>
-          <h3 className="sub-h">Largest House bill only lines in this portal</h3>
+          <h3 className="sub-h">Largest House bill only lines in this office</h3>
           <ol className="review-list">
             {candidates.map((p) => (
               <li key={p.key}>
@@ -472,7 +470,7 @@ function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
   return (
     <section className="section" aria-labelledby="programs-h">
       <h2 id="programs-h" className="section-h">Projects by budget program</h2>
-      <p className="section-lede">Program names come from the BetterGov project records. Amounts compare the two 2027 versions for this portal’s selected lines.</p>
+      <p className="section-lede">Program names come from the BetterGov project records. Amounts compare the two 2027 versions for this office’s listed lines.</p>
       <div className="program-breakdown">
         {rows.map(([name, cell]) => (
           <div className="program-row" key={name}>

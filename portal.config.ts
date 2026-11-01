@@ -5,44 +5,24 @@
 import { defineConfig } from './src/config';
 
 export default defineConfig({
-  id: "malaybalay",
-  kind: "city",
-  name: "City of Malaybalay",
-  shortName: "Malaybalay City",
+  id: "bukidnon-1st-deo",
+  kind: "deo",
+  name: "Bukidnon 1st District Engineering Office",
+  shortName: "Bukidnon 1st DEO",
   siteUrl: "https://bettergov.transparency-portal.orvyx.online/",
   buildYourOwnStrip: false,
   operator: {
     name: "ORVYX"
   },
   scope: {
-    offices: [],
-    places: [
-      {
-        label: "Malaybalay",
-        q: "malaybalay",
-        region: "X"
-      }
+    offices: [
+      "Bukidnon 1st District Engineering Office"
     ],
+    places: [],
     districts: [
       "leg:bukidnon:2nd"
     ],
-    exclude: [
-      { key: "dpwh:house-reading:2419", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:2421", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:9731", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
-      { key: "dpwh:house-reading:9733", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
-      { key: "dpwh:house-reading:9734", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
-      { key: "dpwh:house-reading:2230", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the section name." },
-      { key: "dpwh:house-reading:2416", reason: "The title places this road segment in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:2420", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:2413", reason: "The title places this road segment in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:2228", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the section name." },
-      { key: "dpwh:house-reading:2415", reason: "The title places this bridge in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
-      { key: "dpwh:house-reading:2417", reason: "The title places this bridge in Claveria, Misamis Oriental; Malaybalay appears in the road name." },
-      { key: "dpwh:stage:16510", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
-      { key: "dpwh:stage:16511", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
-      { key: "dpwh:stage:16512", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." }
-    ]
+    exclude: []
   },
   reporting: {
     enabled: false

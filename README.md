@@ -4,8 +4,8 @@ A small, forkable website that compares **selected FY 2027 budget project lines*
 LGU (province, city or municipality) or one DPWH district engineering office: what the
 NEP proposes, what the House bill (House Bill 10858) proposes, which lines appear in only
 one version, and the available page of the source document. Beside it, the **enacted budgets
-of 2020 to 2026**: whole DPWH office totals by year and programs whose titles name the
-configured place. Title matching is not a complete inventory of a city's projects or spending.
+of 2020 to 2026**: whole DPWH office totals by year and, when a place is configured,
+programs whose titles name it. Title matching is not a complete inventory of a city's projects or spending.
 
 <p align="center">
   <img src="docs/poster/create-your-own-transparency-portal-1080x1080.png" alt="Create your own transparency portal: for your LGU or DPWH district office. A sample portal for the Province of Bohol, and three steps: fork, run npm run setup, deploy." width="540">
@@ -39,13 +39,13 @@ writes `portal.config.ts`. Review the generated scope and the wording of any cus
 | Page | What is on it |
 | --- | --- |
 | **Projects** (`/`) | The headline figures; the DPWH offices in scope (`#offices`), each with its 2027 figures, tier and status counts, and under it the legislative districts it serves with their representatives (a shared office's money is shown once, never split); the six statuses; and every project with search, filters (program, status, DPWH office, reason), sorting and a CSV download. An office's line count or status opens the list filtered to it. Filters live in the URL, so a filtered list can be shared. |
-| **Budgets 2020–2026** (`/gaa`) | The enacted budgets (GAA) for the same area: each DPWH office's whole budget by year, grouped by Congress, with the 2027 NEP and House bill beside it but apart; the yearly totals of the programs that name the place (click a year to filter); and every such program or project, in any department, with its amount in each year, search, department and year filters, and a CSV download. |
+| **Budgets 2020–2026** (`/gaa`) | Each configured DPWH office's whole budget by year, grouped by Congress, with the 2027 NEP and House bill beside it but apart. When a place is configured, this page also lists title-matched GAA programs by year. |
 | **National context** (`/context`) | Source-linked summaries at `/context/nep`, `/context/house`, `/context/hearings`, and `/context/gaa`. The hearing page lists DPWH-wide records from BetterGov; it does not claim that a session concerned this office. The masthead displays the visitor's device clock in the Asia/Manila time zone. |
-| **Sources & context** (`/sources`) | Direct links to the portal's title-match API queries and district page, the national FY2027 NEP and House bill views, the enacted GAA browser, and the comparison methodology. It explains which figures are selected local lines and which are nationwide. |
+| **Sources & context** (`/sources`) | Direct links to the office API query and district page, the national FY2027 NEP and House bill views, the enacted GAA browser, and the comparison methodology. It explains which figures are office-level and which are nationwide. |
 | **A project** (`/projects/:program/:id`) | The amount in every version with a link to the exact PDF page, how the two versions were matched, notes on the line, and why it is in this portal. |
 | **About the data** (`/about`) | Every question the portal asks the API, for 2027 and for 2020–2026, with counts and a link to check each one, every line removed by hand and why, the source documents, plain-language rules and terms, and the notices. |
 
-The public Malaybalay City deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its FY2027 title query excludes lines whose own titles explicitly place the work outside Malaybalay; every exclusion and reason appears on `/about`. The historical GAA list remains a name-match index, not city-only totals. Its [custom-domain DNS record](docs/custom-domain.md) is documented separately. Vercel's `*.vercel.app` aliases require team sign-in under the project's current deployment protection setting.
+The public Bukidnon 1st DEO deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its FY2027 ledger queries the named DPWH district engineering office; it is not a city-only budget. Earlier GAA figures cover the whole office. The [custom-domain DNS record](docs/custom-domain.md) is documented separately. Vercel's `*.vercel.app` aliases require team sign-in under the project's current deployment protection setting.
 
 ## How a portal decides which projects are its own
 

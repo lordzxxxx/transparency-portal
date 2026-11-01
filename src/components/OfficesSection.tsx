@@ -86,7 +86,7 @@ function buildOffices(cards: DistrictCard[], queries: QueryReport[], projects: S
 }
 
 function Offices({ list, queries, projects }: { list: Envelope<DistrictCard>[]; queries: QueryReport[]; projects: ScopedProject[] }) {
-  const { overview, config } = usePortal();
+  const { overview } = usePortal();
   const cards = list.map((e) => e.data);
   const { offices, noOffice } = buildOffices(cards, queries, projects);
   const districtCount = new Set(offices.flatMap((o) => o.districts.map((d) => d.id)).concat(noOffice.map((c) => c.id))).size;
@@ -104,7 +104,6 @@ function Offices({ list, queries, projects }: { list: Envelope<DistrictCard>[]; 
         districts, and a shared office’s money is never split between them. Representatives shown hold the seat in the 20th
         Congress.{note && <> {note}</>}
       </p>
-      {config.kind === 'city' && <p className="fine">The office figures and statuses below cover the whole district engineering office, including places outside Malaybalay City. The “In this portal” count is limited to the title matches in this city view.</p>}
 
       <div className={`ogrid${offices.length === 1 ? ' one' : ''}`}>
         {offices.map((o) => <Office key={o.office.id} view={o} />)}
@@ -197,7 +196,7 @@ function Office({ view }: { view: OfficeView }) {
 
       {!query && office.projects_url && (
         <p className="small">
-          This portal lists only title-matched lines attributed to this office. <External href={office.projects_url}>See all the office’s project lines on BetterGov</External>
+          This portal lists only this office’s lines that name its place. <External href={office.projects_url}>All of them</External>
         </p>
       )}
     </article>
