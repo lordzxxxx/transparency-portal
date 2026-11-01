@@ -114,6 +114,9 @@ These come from the API and the comparison behind it. A fork should keep them.
   the 2027 versions are never added to them.
 - `npm run check` reconciles every 2020–2026 search, department by department and year
   by year, against the API's own totals, so a lost page cannot go unnoticed.
+- For a DPWH office scope, `npm run check` also reconciles the 2027 line count and
+  NEP/House amounts with the API's office totals and checks that every amount has
+  a source document page link. This verifies the data feed, not every PDF figure independently.
 
 ## Citizen reports
 

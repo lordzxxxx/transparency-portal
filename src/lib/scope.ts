@@ -12,7 +12,7 @@
  */
 import { DATASET_KEYS, type DatasetKey, type Exclusion, type PortalConfig } from '../config';
 import type { Client, Params } from '../api/client';
-import type { BridgeGroup, Disclaimer, Meta, OfficeLens, ProjectRow } from '../api/types';
+import type { BridgeGroup, Disclaimer, Meta, OfficeLens, ProjectRow, ProjectSums } from '../api/types';
 import { BRIDGE_GROUPS } from '../api/types';
 
 export type Reason =
@@ -34,12 +34,13 @@ export interface QueryReport {
   region?: string;
   /** Rows the API returned. */
   total: number;
-  /** Rows kept (after the region rule). */
+  /** Rows kept after the title and region rules for place queries. */
   kept: number;
   truncated: boolean;
   /** The API request, for anyone who wants to check the list. */
   api: string;
   officeLens?: OfficeLens;
+  sums: ProjectSums;
 }
 
 export interface ScopeResult {
@@ -83,7 +84,11 @@ export async function resolveScope(client: Client, config: PortalConfig): Promis
 
   for (const [i, job] of jobs.entries()) {
     const { list, rows: fetched, truncated } = results[i];
-    const rows = job.region ? fetched.filter((r) => r.region_key == null || r.region_key === job.region) : fetched;
+    const words = job.kind === 'place' ? job.label.toLowerCase().split(/\s+/).filter(Boolean) : [];
+    const rows = fetched.filter((row) =>
+      (!job.region || row.region_key == null || row.region_key === job.region) &&
+      (job.kind !== 'place' || words.every((word) => row.title.toLowerCase().includes(word))),
+    );
     meta ??= list.meta;
     for (const d of list.disclaimers) if (!disclaimers.has(d.id)) disclaimers.set(d.id, d);
     queries.push({
@@ -97,6 +102,7 @@ export async function resolveScope(client: Client, config: PortalConfig): Promis
       truncated,
       api: client.href(`/datasets/${job.dataset}/projects`, job.params),
       officeLens: list.data.office_lens,
+      sums: list.data.sums,
     });
     for (const row of rows) {
       const key = projectKey(row.dataset, row.id);

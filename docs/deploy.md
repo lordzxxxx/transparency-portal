@@ -5,7 +5,8 @@ because the routes (`/districts`, `/projects/…`, `/about`) are handled in the 
 **a path that is not a file serves `/index.html`**.
 
 Before deploying, run `npm run check`. It exits non-zero if an office name, district id
-or exclusion does not match the API, so it can gate a CI deploy:
+or exclusion does not match the API, or office ledger counts, totals and source-link
+fields do not reconcile, so it can gate a CI deploy:
 
 ```yaml
 # .github/workflows/deploy.yml (excerpt)

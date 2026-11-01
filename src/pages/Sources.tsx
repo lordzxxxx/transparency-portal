@@ -45,7 +45,7 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">District association · BetterGov</p>
             <h3>Office and legislative district</h3>
-            <p>The office is associated with its served district in the BetterGov data. This association does not assign every project to a specific place or representative.</p>
+            <p>BetterGov associates this office with {districtPages.map((d) => d.label).join('; ') || 'a legislative district'}. {config.kind === 'deo' && <>An office’s number need not match a legislative district number. </>}This association does not assign every project to a specific place or representative.</p>
             <Link to="/#offices">See this portal’s office card →</Link>
             {districtPages.map((d) => <External key={d.id} href={d.url}>{d.label} on BetterGov</External>)}
           </article>
@@ -71,7 +71,7 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">Executive proposal · FY 2027</p>
             <h3>National Expenditure Program</h3>
-            <p>The proposed national budget by department, with the FY 2026 GAA baseline. This is the NEP overview you requested.</p>
+            <p>The proposed national budget by department, with the FY 2026 GAA baseline. Its totals cover the whole country, not this office alone.</p>
             <Link to="/context/nep">Read the sourced summary</Link>
             <External href={NEP_OVERVIEW_URL}>Open BetterGov’s 2027 NEP overview</External>
             <External href={DPWH_NEP_URL}>See DPWH in the national NEP</External>
@@ -79,7 +79,7 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">House bill comparison · FY 2027</p>
             <h3>House Bill 10858 against the NEP</h3>
-            <p>BetterGov’s national comparison of the four project programs covered by the bill. This is the House budget overview you requested.</p>
+            <p>BetterGov’s national comparison of the four project programs covered by the bill. These nationwide figures are broader than this office’s ledger.</p>
             <Link to="/context/house">Read the sourced summary</Link>
             <External href={NATIONAL_URL}>Open the House bill overview</External>
             <External href={DPWH_COMPARISON_URL}>Open the DPWH program comparison</External>

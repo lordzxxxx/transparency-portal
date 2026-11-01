@@ -8,7 +8,7 @@ Everything comes from the public, read-only, CORS-open BetterGov.ph Budget API
 | --- | --- |
 | `GET /api/v1/hgab/2027` | Program names, status wording (label, sub, help), plain terms, the version names, the document list |
 | `GET /api/v1/hgab/2027/datasets/dpwh/projects?office=…` | Every DPWH line under one office, plus the office's tier and the districts it serves (`office_lens`) |
-| `GET /api/v1/hgab/2027/datasets/{program}/projects?q=…` | Every line in a program whose title names a place |
+| `GET /api/v1/hgab/2027/datasets/{program}/projects?q=…` | Candidate place matches; the API also searches program, region and office fields, so the portal keeps only rows whose titles contain the configured place name |
 | `GET /api/v1/hgab/2027/datasets/{program}/projects/{id}` | One project: every version's amount and PDF page, match and reading labels, notes |
 | `GET /api/v1/hgab/2027/districts/{id}` | A district card: representative, offices, tiers, 2027 figures |
 | `GET /api/v1/hgab/2027/districts` | `npm run setup` only: every district and office, to find names and ids |
@@ -20,8 +20,8 @@ The 2027 project lists are paged at 200 rows; the client fetches every page (`al
 `src/api/client.ts`), four at a time. A query that matches more than 4,000 rows is cut
 there and `npm run check` fails, since no single place should match that many.
 
-Every response carries `meta` (with `notice`, the source commit and build date) and
-`disclaimers`. The portal prints both as they come.
+The 2027 comparison responses carry `meta` (with the notice, source commit and build date)
+and `disclaimers`. The portal prints these as they come.
 
 ## Details worth knowing
 
@@ -29,6 +29,10 @@ Every response carries `meta` (with `notice`, the source commit and build date) 
   ("Bohol 1st District Engineering Office"), not the short card name ("Bohol 1st DEO").
   `npm run setup -- --list-offices` prints the published names; they come from each
   office's FY 2027 `matched_label` on its district page.
+- `npm run check` reconciles each office query's fetched row count and NEP/House
+  totals with the API's reported totals. It also requires a source record link and
+  a PDF page link wherever a 2027 amount is present. This checks link fields;
+  it does not independently transcribe every figure from the original PDFs.
 - The irrigation list gives no region, so the API's `region` filter would drop every
   irrigation line. The portal applies a place's region itself and keeps lines with no
   region.

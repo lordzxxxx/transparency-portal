@@ -163,16 +163,10 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
             </div>
           </dl>
 
-          <div className="report">
+          {report && <div className="report">
             <p className="label">Seen this project on the ground?</p>
-            {report ? (
-              <a className="button button-primary" href={report}>Report on this project ↗</a>
-            ) : (
-              <p className="small">
-                Citizen reports will go to one place for every portal, budget.bettergov.ph. Reporting is not open yet.
-              </p>
-            )}
-          </div>
+            <a className="button button-primary" href={report}>Report on this project ↗</a>
+          </div>}
 
           <p className="small links">
             <External href={p.url}>This project on budget.bettergov.ph</External>

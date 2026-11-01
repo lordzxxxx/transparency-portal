@@ -101,7 +101,8 @@ function Offices({ list, queries, projects }: { list: Envelope<DistrictCard>[]; 
       </h2>
       <p className="section-lede">
         DPWH lists its money by the district engineering office that does the work. Each office serves one or more legislative
-        districts, and a shared office’s money is never split between them. Representatives shown hold the seat in the 20th
+        districts. An office’s number can differ from the legislative district’s number; check the linked district record below.
+        A shared office’s money is never split between districts. Representatives shown hold the seat in the 20th
         Congress.{note && <> {note}</>}
       </p>
 

@@ -36,7 +36,7 @@ async function main() {
   console.log('Queries');
   for (const q of scope.queries) {
     const what = q.kind === 'office' ? `office "${q.label}"` : `title names "${q.label}" (q=${q.params.q})`;
-    const kept = q.region ? ` · ${count(q.kept)} kept in region ${q.region} or giving no region` : '';
+    const kept = q.kind === 'place' ? ` · ${count(q.kept)} titles kept${q.region ? ` in region ${q.region} or giving no region` : ''}` : '';
     console.log(`  ${q.dataset.padEnd(5)} ${what}: ${count(q.total)}${kept}`);
     if (q.kind === 'office') {
       if (q.total === 0) problems.push(`office "${q.label}" matches no DPWH line. Use the name as published: npm run setup -- --list-offices`);
@@ -53,6 +53,24 @@ async function main() {
   for (const { exclusion, project } of scope.excluded) {
     // (2020–2026 exclusions, gaa:…, are checked below with the enacted budgets.)
     if (!project) problems.push(`exclusion ${exclusion.key} matches no line in the portal; remove it.`);
+  }
+
+  // Reconcile the visible office ledger with the API's totals for the full
+  // filtered result, including any exclusions the maintainer publishes.
+  const allSelected = [...scope.projects, ...scope.excluded.flatMap(({ project }) => project ? [project] : [])];
+  for (const q of scope.queries.filter((item) => item.kind === 'office')) {
+    const rows = allSelected.filter((row) => row.reasons.some((reason) => reason.kind === 'office' && reason.label === q.label));
+    const nep = rows.reduce((sum, row) => sum + (row.nep_php ?? 0), 0);
+    const house = rows.reduce((sum, row) => sum + (row.house_php ?? 0), 0);
+    if (rows.length !== q.total) problems.push(`office "${q.label}": fetched ${rows.length} lines but the API reports ${q.total}.`);
+    if (nep !== (q.sums.nep_php ?? 0)) problems.push(`office "${q.label}": NEP rows total ${php(nep)}, API reports ${php(q.sums.nep_php)}.`);
+    if (house !== (q.sums.hgab3_php ?? 0)) problems.push(`office "${q.label}": House rows total ${php(house)}, API reports ${php(q.sums.hgab3_php)}.`);
+    for (const row of rows) {
+      if (!row.url || !row.api_url) problems.push(`${row.key}: missing BetterGov project or API record link.`);
+      if (row.nep_php != null && (!row.pdf_url.nep || !row.nep_page)) problems.push(`${row.key}: NEP amount has no linked PDF page.`);
+      if (row.house_php != null && (!row.pdf_url.hgab3 || !row.hgab3_page)) problems.push(`${row.key}: House amount has no linked PDF page.`);
+    }
+    console.log(`  reconciled ${count(rows.length)} office lines and their NEP/House amounts with the API; checked source and PDF page link fields`);
   }
 
   // Lines found only by name, under a DPWH office outside the scope: often right

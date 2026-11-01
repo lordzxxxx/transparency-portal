@@ -53,8 +53,8 @@ function AboutView({ scope, overview }: { scope: ScopeResult; overview: Overview
         title={`Where these ${plural(scope.projects.length, 'project')} come from`}
       >
         <p>
-          Every figure comes from the BetterGov.ph Budget API, which sets the House bill against the NEP project by project.
-          This portal asks the API the questions below and shows every line it gets back.
+          Project amounts, labels and document links come from the BetterGov.ph Budget API, which sets the House bill against the NEP project by project.
+          This portal asks the API the questions below, shows every line it gets back, and calculates the displayed counts and totals from those lines.
           {' '}<Link to="/sources">See how these sources relate to the national budget →</Link>
         </p>
       </PageHead>

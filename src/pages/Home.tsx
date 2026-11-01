@@ -27,7 +27,7 @@ const SORTS: Record<Sort, { label: string; cmp: (a: ScopedProject, b: ScopedProj
 
 export default function Home() {
   const { scope, overview, config } = usePortal();
-  useTitle(`Every FY 2027 project · ${shortNameOf(config)}`);
+  useTitle(`${config.kind === 'deo' ? 'FY 2027 office project lines' : 'FY 2027 projects'} · ${shortNameOf(config)}`);
   const datasets = overview.status === 'ready' ? overview.value.data.datasets : [];
   return (
     <main className="page main">
@@ -152,9 +152,10 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     <>
       <PageHead
         eyebrow={<>FY 2027<span className="sep">·</span>NEP and House Bill 10858<span className="sep">·</span>{name}</>}
-        title={`${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
+        title={config.kind === 'deo' ? `${plural(summary.rows, 'project')} listed under ${name}` : `${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
       >
         <Lede summary={summary} />
+        {config.kind === 'deo' && <p>These are lines the source documents list under this DPWH office. The office name does not establish a project’s exact location. The NEP and House bill are proposals, not records of spending. <Link to="/sources">How to check the sources →</Link></p>}
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
