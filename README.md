@@ -45,7 +45,7 @@ writes `portal.config.ts`. That file is the only one a fork needs to change.
 | **A project** (`/projects/:program/:id`) | The amount in every version with a link to the exact PDF page, how the two versions were matched, notes on the line, and why it is in this portal. |
 | **About the data** (`/about`) | Every question the portal asks the API, for 2027 and for 2020–2026, with counts and a link to check each one, every line removed by hand and why, the source documents, plain-language rules and terms, and the notices. |
 
-The Bukidnon deployment's [custom-domain setup](docs/custom-domain.md) is documented separately. Keep the Vercel URL as the canonical site until the domain's DNS and HTTPS both work.
+The Bukidnon deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its [custom-domain DNS record](docs/custom-domain.md) is documented separately; the Vercel URL remains a working fallback.
 
 ## How a portal decides which projects are its own
 

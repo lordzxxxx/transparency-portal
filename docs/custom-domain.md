@@ -2,7 +2,7 @@
 
 Requested hostname: `bettergov.transparency-portal.orvyx.online`.
 
-The hostname is attached to the Vercel `transparency-portal` project. `orvyx.online` uses Hostinger nameservers, but this subdomain has no DNS record yet. Vercel cannot serve the requested hostname until the record below resolves publicly.
+The hostname is attached to the Vercel `transparency-portal` project. `orvyx.online` uses Hostinger nameservers. On 1 November 2026, Vercel verified the DNS configuration and the hostname returned HTTP 200 over HTTPS. `portal.config.ts` now uses it as the canonical site URL.
 
 When the parent domain is registered and its DNS zone is active, add this record at the provider managing its authoritative DNS:
 
@@ -12,7 +12,7 @@ When the parent domain is registered and its DNS zone is active, add this record
 
 In Hostinger, use **Domains → Domain portfolio → orvyx.online → DNS / Nameservers → DNS records**. Enter only `bettergov.transparency-portal` in the host field; Hostinger appends `.orvyx.online`. Do not create a separate Hostinger-hosted website for this subdomain. Leave the existing `orvyx.online` and `www.orvyx.online` records alone.
 
-Then verify:
+To verify again after a DNS change:
 
 ```bash
 dig +short CNAME bettergov.transparency-portal.orvyx.online
@@ -20,4 +20,4 @@ vercel domains verify bettergov.transparency-portal.orvyx.online
 curl -I https://bettergov.transparency-portal.orvyx.online/
 ```
 
-Vercel should report a valid configuration and the HTTPS request should succeed before changing `portal.config.ts` `siteUrl` or making the new hostname primary. Check the current recommended DNS value in Vercel if the domain is ever removed and reattached.
+Vercel should report a valid configuration and the HTTPS request should succeed. Check the current recommended DNS value in Vercel if the domain is ever removed and reattached. The old `transparency-portal-sable.vercel.app` address remains a fallback; its page metadata points to the custom domain.
