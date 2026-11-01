@@ -16,6 +16,7 @@ import { useTitle } from '../lib/use-title';
 const PAGE = 100;
 
 type Sort = 'house' | 'nep' | 'change' | 'title';
+type LedgerGroup = 'status' | 'program' | 'none';
 const SORTS: Record<Sort, { label: string; cmp: (a: ScopedProject, b: ScopedProject) => number }> = {
   house: { label: 'House bill amount', cmp: (a, b) => (b.house_php ?? -1) - (a.house_php ?? -1) },
   nep: { label: 'NEP amount', cmp: (a, b) => (b.nep_php ?? -1) - (a.nep_php ?? -1) },
@@ -73,10 +74,13 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
   const [params, setParams] = useSearchParams();
   const q = params.get('q') ?? '';
   const program = (params.get('program') ?? '') as DatasetKey | '';
+  const budgetProgram = params.get('budgetProgram') ?? '';
   const status = (params.get('status') ?? '') as BridgeGroup | '';
   const why = params.get('why') ?? '';
   const office = params.get('office') ?? '';
   const sort = (params.get('sort') as Sort) in SORTS ? (params.get('sort') as Sort) : 'house';
+  const groupParam = params.get('group');
+  const group: LedgerGroup = groupParam === 'program' || groupParam === 'none' ? groupParam : 'status';
   const [shown, setShown] = useState(PAGE);
 
   const setParam = (key: string, value: string) => {
@@ -100,10 +104,17 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     return [...seen.entries()];
   }, [all]);
 
+  const budgetPrograms = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const p of all) if (p.program) counts.set(p.program, (counts.get(p.program) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  }, [all]);
+
   const filtered = useMemo(() => {
     const words = q.toLowerCase().split(/\s+/).filter(Boolean);
     const rows = all.filter((p) => {
       if (program && p.dataset !== program) return false;
+      if (budgetProgram && p.program !== budgetProgram) return false;
       if (status && p.bridge_group !== status) return false;
       if (why && !p.reasons.some((r) => `${r.kind}:${r.label}` === why)) return false;
       if (office && p.office !== office) return false;
@@ -114,9 +125,27 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       return true;
     });
     return rows.sort((a, b) => SORTS[sort].cmp(a, b) || a.title.localeCompare(b.title));
-  }, [all, q, program, status, why, office, sort]);
+  }, [all, q, program, budgetProgram, status, why, office, sort]);
   const filteredSummary = useMemo(() => summarise(filtered), [filtered]);
   const narrowed = filtered.length !== all.length;
+  const visible = filtered.slice(0, shown);
+  const ledgerGroups = (() => {
+    if (group === 'none') return [{ key: 'all', label: '', rows: visible, summary: summarise(visible) }];
+    const byKey = new Map<string, ScopedProject[]>();
+    for (const p of visible) {
+      const key = group === 'status' ? p.bridge_group : p.program ?? 'Program not specified in the API';
+      const rows = byKey.get(key) ?? [];
+      rows.push(p);
+      byKey.set(key, rows);
+    }
+    const keys = [...byKey.keys()].sort((a, b) => group === 'status'
+      ? BRIDGE_GROUPS.indexOf(a as BridgeGroup) - BRIDGE_GROUPS.indexOf(b as BridgeGroup)
+      : (byKey.get(b)?.length ?? 0) - (byKey.get(a)?.length ?? 0) || a.localeCompare(b));
+    return keys.map((key) => {
+      const rows = byKey.get(key)!;
+      return { key, label: group === 'status' ? groups[key as BridgeGroup].label : key, rows, summary: summarise(rows) };
+    });
+  })();
 
   return (
     <>
@@ -188,14 +217,23 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
             <input type="search" value={q} placeholder="Barangay, road, school, office…" onChange={(e) => setParam('q', e.target.value)} />
           </label>
           <label className="field">
-            <span className="label">Program</span>
+            <span className="label">Dataset</span>
             <select value={program} onChange={(e) => setParam('program', e.target.value)}>
-              <option value="">All programs</option>
+              <option value="">All datasets</option>
               {(Object.keys(summary.byDataset) as DatasetKey[]).map((k) => (
                 <option key={k} value={k}>{programName(k)} ({count(summary.byDataset[k]!.rows)})</option>
               ))}
             </select>
           </label>
+          {budgetPrograms.length > 1 && (
+            <label className="field">
+              <span className="label">Budget program</span>
+              <select value={budgetProgram} onChange={(e) => setParam('budgetProgram', e.target.value)}>
+                <option value="">All budget programs</option>
+                {budgetPrograms.map(([name, n]) => <option key={name} value={name}>{name} ({count(n)})</option>)}
+              </select>
+            </label>
+          )}
           <label className="field">
             <span className="label">Status</span>
             <select value={status} onChange={(e) => setParam('status', e.target.value)}>
@@ -229,7 +267,17 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
               {(Object.keys(SORTS) as Sort[]).map((k) => <option key={k} value={k}>{SORTS[k].label}</option>)}
             </select>
           </label>
+          <label className="field">
+            <span className="label">Group records</span>
+            <select value={group} onChange={(e) => setParam('group', e.target.value === 'status' ? '' : e.target.value)}>
+              <option value="status">By comparison status</option>
+              <option value="program">By budget program</option>
+              <option value="none">No groups</option>
+            </select>
+          </label>
         </div>
+
+        <p className="ledger-key"><span className="status-dot g-house_only" aria-hidden="true" /> Status comes from the BetterGov comparison. <span className="source-key">PDF</span> Source pages link to the published documents. A dash means a version has no matched line.</p>
 
         {narrowed && (
           <p className="filter-sums">
@@ -242,7 +290,17 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           </p>
         )}
 
-        <ProjectTable rows={filtered.slice(0, shown)} programName={programName} />
+        {ledgerGroups.map((bucket) => bucket.rows.length > 0 && (
+          <div className="ledger-group" key={bucket.key}>
+            {group !== 'none' && (
+              <div className="ledger-group-head">
+                <h3>{group === 'status' && <span className={`status-dot g-${bucket.key}`} aria-hidden="true" />}{bucket.label} <span className="muted">· {plural(bucket.rows.length, 'record')}</span></h3>
+                <p>NEP {bucket.summary.nep.rows ? php(bucket.summary.nep.php) : '—'} <span className="sep">·</span> House bill {bucket.summary.house.rows ? php(bucket.summary.house.php) : '—'}</p>
+              </div>
+            )}
+            <ProjectTable rows={bucket.rows} programName={programName} />
+          </div>
+        ))}
 
         {filtered.length === 0 && <p className="state">No project matches. Try fewer words or clear the filters.</p>}
         {filtered.length > shown && (
@@ -435,7 +493,7 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
         <span role="columnheader" className="r">Change</span>
       </div>
       {rows.map((p) => (
-        <div className="tr" role="row" key={p.key}>
+        <div className={`tr ledger-row ledger-status-${p.bridge_group}`} role="row" key={p.key}>
           <span role="cell" className="td-project">
             <Link to={`/projects/${p.dataset}/${encodeURIComponent(p.id)}`} className="project-title">{p.title}</Link>
             <span className="project-meta">
@@ -443,8 +501,12 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
               {p.office && <span>{shortOffice(p.office)}</span>}
               {p.region && <span>{p.region}</span>}
               <ReasonTags reasons={p.reasons} />
+            </span>
+            <span className="source-pages">
+              <span className="label">Source pages</span>
               {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP p. {p.nep_page ?? 'PDF'}</External>}
               {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House p. {p.hgab3_page ?? 'PDF'}</External>}
+              {!p.pdf_url.nep && !p.pdf_url.hgab3 && <span className="muted">No PDF page linked</span>}
             </span>
           </span>
           <span role="cell" className="td-status"><StatusChip group={p.bridge_group} label={p.status_label} held={p.held} /></span>

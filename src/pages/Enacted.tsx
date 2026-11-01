@@ -122,9 +122,11 @@ function OfficeHistories() {
 
 function OfficeHistoryList({ list }: { list: Envelope<DistrictCard>[] }) {
   const offices = useMemo(() => {
-    const byId = new Map<string, DistrictOffice>();
-    for (const env of list) for (const o of env.data.offices) if (!byId.has(o.id)) byId.set(o.id, o);
-    return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true }));
+    const byId = new Map<string, { office: DistrictOffice; sourceUrl: string }>();
+    for (const env of list) for (const office of env.data.offices) {
+      if (!byId.has(office.id)) byId.set(office.id, { office, sourceUrl: env.data.url });
+    }
+    return [...byId.values()].sort((a, b) => a.office.name.localeCompare(b.office.name, 'en', { numeric: true }));
   }, [list]);
   const officeDisclaimer = list.flatMap((e) => e.disclaimers).filter((d) => d.id === 'disclaimer-offices').slice(0, 1);
   if (!offices.length) return null;
@@ -139,7 +141,7 @@ function OfficeHistoryList({ list }: { list: Envelope<DistrictCard>[] }) {
         <span><i className="sw sw-house" /> 2027 House bill, named projects only</span>
       </p>
       <div className="hgrid">
-        {offices.map((o) => <OfficeHistory key={o.id} office={o} />)}
+        {offices.map(({ office, sourceUrl }) => <OfficeHistory key={office.id} office={office} sourceUrl={sourceUrl} />)}
       </div>
       <Disclaimers items={officeDisclaimer} compact />
     </section>
@@ -149,7 +151,7 @@ function OfficeHistoryList({ list }: { list: Envelope<DistrictCard>[] }) {
 /** Three bars each: 2020–22, 2023–25, and 2026 with the two 2027 versions. */
 const CONGRESSES = [{ label: '18th Congress' }, { label: '19th Congress' }, { label: '20th Congress' }];
 
-function OfficeHistory({ office }: { office: DistrictOffice }) {
+function OfficeHistory({ office, sourceUrl }: { office: DistrictOffice; sourceUrl: string }) {
   const years = office.years ?? [];
   const slot = (fy: number, stage: string) => years.find((y) => y.fy === fy && y.stage === stage);
   const bars = [
@@ -176,6 +178,24 @@ function OfficeHistory({ office }: { office: DistrictOffice }) {
       <div className="congresses" aria-hidden="true">
         {CONGRESSES.map((c) => <span key={c.label}>{c.label}</span>)}
       </div>
+      <table className="office-ledger">
+        <caption>Exact published amounts for DPWH {office.name}</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col">Budget stage and coverage</th><th scope="col">Amount</th></tr></thead>
+        <tbody>
+          {GAA_YEARS.map((fy) => {
+            const record = slot(fy, 'gaa');
+            return <tr key={fy}><th scope="row">{fy}</th><td><strong>Enacted GAA</strong><span>{record?.scope ?? 'No office record'}</span></td><td className="num">{phpFull(record?.php)}</td></tr>;
+          })}
+        </tbody>
+        <tbody className="office-ledger-proposals">
+          <tr className="office-ledger-divider"><th colSpan={3} scope="rowgroup">2027 proposals · not enacted</th></tr>
+          {(['nep', 'hgab3'] as const).map((stage) => {
+            const record = slot(2027, stage);
+            return <tr key={stage}><th scope="row">2027</th><td><strong>{record?.stage_label ?? (stage === 'nep' ? 'NEP' : 'House bill')}</strong><span>{record?.scope ?? 'No office record'}</span></td><td className="num">{phpFull(record?.php)}</td></tr>;
+          })}
+        </tbody>
+      </table>
+      <p className="fine">The 2027 NEP figure covers the whole office; the House bill figure covers named projects only. Their different coverage does not support a direct change calculation. <External href={sourceUrl}>Check the district record on BetterGov</External></p>
       {office.co_served_districts.length > 0 && (
         <p className="fine">Whole office, shared with {office.co_served_districts.map((d) => d.label).join('; ')}; not split.</p>
       )}
