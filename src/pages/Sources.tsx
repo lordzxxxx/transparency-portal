@@ -52,8 +52,9 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">2020–2026 · enacted budgets</p>
             <h3>Earlier office totals</h3>
-            <p>See this office’s whole yearly GAA amounts. The GAA project records cannot be reliably assigned to this office line by line.</p>
+            <p>See this office’s whole yearly GAA amounts as reported by the BetterGov district API. It does not provide an original GAA PDF page for each office-year total. The GAA project records cannot be reliably assigned to this office line by line.</p>
             <Link to="/gaa">View the office’s yearly budgets →</Link>
+            {districtPages.map((d) => <External key={d.id} href={client.href(`/districts/${encodeURIComponent(d.id)}`)}>Inspect the district API record</External>)}
           </article>
         </div>
         {meta && (
@@ -98,7 +99,7 @@ export default function Sources() {
           <li>Compare the NEP and House bill amounts and follow each available PDF page link.</li>
           <li>Read the matching notes and the <External href={METHODOLOGY_URL}>BetterGov comparison methodology</External> before treating a difference as a finding.</li>
         </ol>
-        <p>“House bill only” means a line appears in the compared House list and has no matched NEP line in this data. It is a candidate for review, not proof of an insertion or wrongdoing.</p>
+        <p>“House bill only” means a line appears in the compared House list and has no matched NEP line in this data. It is a candidate for review, not proof of an insertion or wrongdoing. PDF page references are positions in the linked file and may differ from numbers printed on the pages.</p>
         <p className="fine">Data is served by the <External href={`${client.base}/docs`}>BetterGov Budget API</External>. This portal is independent and unofficial. <Link to="/about">Read its exact queries, documents and notices →</Link></p>
       </section>
     </main>

@@ -74,6 +74,7 @@ export interface DocumentInfo {
   volume: string | null;
   pdf_url: string;
   source_url: string | null;
+  notes?: string;
 }
 
 export interface RecordVersion { key: Version; short: string; label: string; plain: string }

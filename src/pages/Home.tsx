@@ -157,6 +157,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
+      <p className="fine">These counts and totals are calculated from the project rows returned by the BetterGov API. {scope.queries[0] && <External href={scope.queries[0].api}>Check the API query</External>} {scope.queries.length > 1 && <Link to="/about">See every query</Link>} Check individual records and document pages in the ledger below. <Link to="/sources">Source guide →</Link></p>
 
       <nav className="jump-nav" aria-label="Explore this portal">
         <Link to="/#projects"><strong>Browse all {count(summary.rows)} projects</strong><span>Search, filter and open source pages</span></Link>
@@ -277,7 +278,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           </label>
         </div>
 
-        <p className="ledger-key"><span className="status-dot g-house_only" aria-hidden="true" /> Status comes from the BetterGov comparison. <span className="source-key">PDF</span> Source pages link to the published documents. A dash means a version has no matched line.</p>
+        <p className="ledger-key"><span className="status-dot g-house_only" aria-hidden="true" /> Status comes from the BetterGov comparison. <span className="source-key">PDF</span> Page numbers are positions in the linked PDF, which may differ from numbers printed on its pages. A dash means a version has no matched line.</p>
 
         {narrowed && (
           <p className="filter-sums">
@@ -482,6 +483,7 @@ function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
 }
 
 function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programName: (k: DatasetKey) => string }) {
+  const { client } = usePortal();
   if (!rows.length) return null;
   return (
     <div className="table" role="table" aria-label="Projects">
@@ -506,6 +508,7 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
               <span className="label">Source pages</span>
               {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP p. {p.nep_page ?? 'PDF'}</External>}
               {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House p. {p.hgab3_page ?? 'PDF'}</External>}
+              <External href={client.href(p.api_url)}>API record</External>
               {!p.pdf_url.nep && !p.pdf_url.hgab3 && <span className="muted">No PDF page linked</span>}
             </span>
           </span>

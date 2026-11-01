@@ -132,11 +132,13 @@ function AboutView({ scope, overview }: { scope: ScopeResult; overview: Overview
 
       <section className="section" aria-labelledby="d-h">
         <h2 id="d-h" className="section-h">The documents</h2>
+        <p className="fine">PDF links open the copies served by BetterGov. Source-site links come from the API; some point to a publisher’s document portal rather than the exact file.</p>
         <ul className="docs">
           {overview.documents.map((d) => (
             <li key={d.key}>
               <External href={d.pdf_url}>{d.title}</External>
-              {d.source_url && <span className="muted small"> · <a href={d.source_url} target="_blank" rel="noopener">where it was published</a></span>}
+              {d.source_url && <span className="muted small"> · <a href={d.source_url} target="_blank" rel="noopener">source site</a></span>}
+              {d.notes && <details className="fine"><summary>Document and page notes</summary><p>{d.notes}</p></details>}
             </li>
           ))}
         </ul>

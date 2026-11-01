@@ -119,7 +119,8 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
           </table>
           <p className="fine">
             The NEP and the House bill are two versions of one budget, so the amounts are compared, never added. Open the
-            page to check the figure against the document itself.
+            linked PDF to check the figure against the document itself. Page numbers are positions in that PDF and may differ
+            from numbers printed on its pages.
           </p>
 
           {p.labels.flags.length > 0 && (
