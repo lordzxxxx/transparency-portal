@@ -84,7 +84,7 @@ function AboutView({ scope, overview }: { scope: ScopeResult; overview: Overview
         </div>
         <p className="fine">
           A line found by more than one question is shown once, with every reason. Searching by name finds titles that spell
-          the place out; a project whose title does not name it is found only through its DPWH office.
+          the place out. This city portal has no office-wide query, so it may miss projects whose titles omit Malaybalay. A title match alone does not establish the project's exact location.
         </p>
       </section>
 

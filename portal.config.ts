@@ -5,20 +5,24 @@
 import { defineConfig } from './src/config';
 
 export default defineConfig({
-  id: "bukidnon-1st-deo",
-  kind: "deo",
-  name: "Bukidnon 1st District Engineering Office",
-  shortName: "Bukidnon 1st DEO",
+  id: "malaybalay",
+  kind: "city",
+  name: "City of Malaybalay",
+  shortName: "Malaybalay City",
   siteUrl: "https://bettergov.transparency-portal.orvyx.online/",
   buildYourOwnStrip: false,
   operator: {
     name: "ORVYX"
   },
   scope: {
-    offices: [
-      "Bukidnon 1st District Engineering Office"
+    offices: [],
+    places: [
+      {
+        label: "Malaybalay",
+        q: "malaybalay",
+        region: "X"
+      }
     ],
-    places: [],
     districts: [
       "leg:bukidnon:2nd"
     ],

@@ -1,18 +1,18 @@
 # Transparency Portal
 
-A small, forkable website that shows citizens **every FY 2027 budget project** for one
+A small, forkable website that compares **selected FY 2027 budget project lines** for one
 LGU (province, city or municipality) or one DPWH district engineering office: what the
-NEP gave it, what the House bill (House Bill 10858) gives it, what was added or dropped,
-and the page of the source document each figure is on. Beside it, the **enacted budgets
-of 2020 to 2026** for the same area: each DPWH office's budget year by year, and every
-program or project in any department whose name names the place.
+NEP proposes, what the House bill (House Bill 10858) proposes, which lines appear in only
+one version, and the available page of the source document. Beside it, the **enacted budgets
+of 2020 to 2026**: whole DPWH office totals by year and programs whose titles name the
+configured place. Title matching is not a complete inventory of a city's projects or spending.
 
 <p align="center">
   <img src="docs/poster/create-your-own-transparency-portal-1080x1080.png" alt="Create your own transparency portal: for your LGU or DPWH district office. A sample portal for the Province of Bohol, and three steps: fork, run npm run setup, deploy." width="540">
 </p>
 
 **See a sample:** [transparency-portal.bettergov.workers.dev](https://transparency-portal.bettergov.workers.dev),
-the Province of Bohol, built from this repository as it is.
+the BetterGov Province of Bohol portal.
 
 It has no backend and no database. Everything comes from the public
 [BetterGov.ph Budget API](https://budget.bettergov.ph/docs), the same data behind
@@ -32,7 +32,7 @@ npm run dev       # http://localhost:5132
 ```
 
 `npm run setup` asks a few questions, looks up exact names and ids in the API, and
-writes `portal.config.ts`. That file is the only one a fork needs to change.
+writes `portal.config.ts`. Review the generated scope and the wording of any customized pages before publishing.
 
 ## What the portal shows
 
@@ -41,11 +41,11 @@ writes `portal.config.ts`. That file is the only one a fork needs to change.
 | **Projects** (`/`) | The headline figures; the DPWH offices in scope (`#offices`), each with its 2027 figures, tier and status counts, and under it the legislative districts it serves with their representatives (a shared office's money is shown once, never split); the six statuses; and every project with search, filters (program, status, DPWH office, reason), sorting and a CSV download. An office's line count or status opens the list filtered to it. Filters live in the URL, so a filtered list can be shared. |
 | **Budgets 2020–2026** (`/gaa`) | The enacted budgets (GAA) for the same area: each DPWH office's whole budget by year, grouped by Congress, with the 2027 NEP and House bill beside it but apart; the yearly totals of the programs that name the place (click a year to filter); and every such program or project, in any department, with its amount in each year, search, department and year filters, and a CSV download. |
 | **National context** (`/context`) | Source-linked summaries at `/context/nep`, `/context/house`, `/context/hearings`, and `/context/gaa`. The hearing page lists DPWH-wide records from BetterGov; it does not claim that a session concerned this office. The masthead displays the visitor's device clock in the Asia/Manila time zone. |
-| **Sources & context** (`/sources`) | Direct links to the office's API query and district page, the national FY2027 NEP and House bill views, the enacted GAA browser, and the comparison methodology. It explains which figures are local and which are nationwide. |
+| **Sources & context** (`/sources`) | Direct links to the portal's title-match API queries and district page, the national FY2027 NEP and House bill views, the enacted GAA browser, and the comparison methodology. It explains which figures are selected local lines and which are nationwide. |
 | **A project** (`/projects/:program/:id`) | The amount in every version with a link to the exact PDF page, how the two versions were matched, notes on the line, and why it is in this portal. |
 | **About the data** (`/about`) | Every question the portal asks the API, for 2027 and for 2020–2026, with counts and a link to check each one, every line removed by hand and why, the source documents, plain-language rules and terms, and the notices. |
 
-The Bukidnon deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its [custom-domain DNS record](docs/custom-domain.md) is documented separately; the Vercel URL remains a working fallback.
+The Malaybalay City deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its [custom-domain DNS record](docs/custom-domain.md) is documented separately; the Vercel URL remains a working fallback.
 
 ## How a portal decides which projects are its own
 

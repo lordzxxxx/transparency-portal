@@ -121,7 +121,7 @@ function OfficeHistories() {
 }
 
 function OfficeHistoryList({ list }: { list: Envelope<DistrictCard>[] }) {
-  const { client } = usePortal();
+  const { client, config } = usePortal();
   const offices = useMemo(() => {
     const byId = new Map<string, { office: DistrictOffice; sourceUrl: string; sourceApi: string }>();
     for (const env of list) for (const office of env.data.offices) {
@@ -136,6 +136,7 @@ function OfficeHistoryList({ list }: { list: Envelope<DistrictCard>[] }) {
       <h2 id="office-years-h" className="section-h">
         {offices.length === 1 ? 'The DPWH office’s budget, year by year' : `${count(offices.length)} DPWH offices’ budgets, year by year`}
       </h2>
+      {config.kind === 'city' && <p className="fine">These are whole district engineering office figures. The office serves a district that includes Malaybalay; its totals are not city-only amounts. The name-matched city programs appear below.</p>}
       <p className="legend">
         <span><i className="sw sw-gaa" /> Enacted (GAA), whole office</span>
         <span><i className="sw sw-nep" /> 2027 NEP, whole office</span>

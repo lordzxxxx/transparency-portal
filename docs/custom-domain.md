@@ -1,4 +1,4 @@
-# Bukidnon portal custom domain
+# Malaybalay City portal custom domain
 
 Requested hostname: `bettergov.transparency-portal.orvyx.online`.
 
