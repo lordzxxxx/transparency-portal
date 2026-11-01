@@ -155,20 +155,20 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
         title={config.kind === 'deo' ? `${plural(summary.rows, 'project')} listed under ${name}` : `${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
       >
         <Lede summary={summary} />
-        {config.kind === 'deo' && <p>These are lines the source documents list under this DPWH office. The office name does not establish a project’s exact location. The NEP and House bill are proposals, not records of spending. <Link to="/sources">How to check the sources →</Link></p>}
+        {config.kind === 'deo' && <p>BetterGov attributes these lines to this DPWH office. The office name does not establish a project’s exact location. The NEP and House bill are proposals, not records of spending. <Link to="/sources#verify">How to verify a figure →</Link></p>}
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
-      <p className="fine">These counts and totals are calculated from the project rows returned by the BetterGov API. {scope.queries[0] && <External href={scope.queries[0].api}>Check the API query</External>} {scope.queries.length > 1 && <Link to="/about">See every query</Link>} Check individual records and document pages in the ledger below. <Link to="/sources">Source guide →</Link></p>
+      <p className="fine">These counts and totals are calculated from project rows returned by the BetterGov API. {scope.queries[0] && <External href={scope.queries[0].api}>Open the source API query (JSON)</External>} {scope.queries.length > 1 && <Link to="/about">See every query</Link>} Check individual records and document pages in the ledger below. <Link to="/sources#verify">Follow the verification steps →</Link></p>
 
       <nav className="jump-nav" aria-label="Explore this portal">
-        <Link to="/#projects"><strong>Browse all {count(summary.rows)} projects</strong><span>Search, filter and open source pages</span></Link>
+        <Link to="/#projects"><strong>Choose a project to verify</strong><span>Browse {count(summary.rows)} lines and open their source pages</span></Link>
         {summary.groups.house_only.rows > 0 ? (
           <Link to="/?status=house_only#projects"><strong>Review {count(summary.groups.house_only.rows)} House bill only lines</strong><span>Comparison candidates to check</span></Link>
         ) : (
           <Link to="/#groups"><strong>Compare project statuses</strong><span>See how the two versions relate</span></Link>
         )}
-        <Link to="/gaa"><strong>View 2020–2026 budgets</strong><span>Whole office totals by year</span></Link>
+        <Link to="/sources#verify"><strong>How to verify a figure</strong><span>What to check in the record and PDFs</span></Link>
       </nav>
 
       <BetterGovHighlights />
@@ -178,7 +178,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       <ProgramBreakdown projects={all} />
 
       <section className="section" id="groups" aria-labelledby="groups-h">
-        <h2 id="groups-h" className="section-h">What the House bill did to them</h2>
+        <h2 id="groups-h" className="section-h">How the House bill compares with the NEP</h2>
         <div className="groups" role="group" aria-label="Filter by status">
           {BRIDGE_GROUPS.map((g) => {
             const cell = summary.groups[g];
@@ -401,7 +401,7 @@ function Stats({ summary, programName }: { summary: Summary; programName: (k: Da
       <div>
         <dt className="label">In the House bill only</dt>
         <dd className="stat num">{count(summary.groups.house_only.rows)}</dd>
-        <dd className="stat-sub">{php(summary.groups.house_only.house_php)} · insertion candidates</dd>
+        <dd className="stat-sub">{php(summary.groups.house_only.house_php)} · lines to review, not confirmed insertions</dd>
       </div>
     </dl>
   );
@@ -487,7 +487,6 @@ function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
 }
 
 function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programName: (k: DatasetKey) => string }) {
-  const { client } = usePortal();
   if (!rows.length) return null;
   return (
     <div className="table" role="table" aria-label="Projects">
@@ -509,10 +508,9 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
               <ReasonTags reasons={p.reasons} />
             </span>
             <span className="source-pages">
-              <span className="label">Source pages</span>
-              {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP p. {p.nep_page ?? 'PDF'}</External>}
-              {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House p. {p.hgab3_page ?? 'PDF'}</External>}
-              <External href={client.href(p.api_url)}>API record</External>
+              <Link className="verify-link" to={`/projects/${p.dataset}/${encodeURIComponent(p.id)}`}>Verify this project →</Link>
+              {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP PDF, page {p.nep_page ?? 'unknown'}</External>}
+              {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House PDF, page {p.hgab3_page ?? 'unknown'}</External>}
               {!p.pdf_url.nep && !p.pdf_url.hgab3 && <span className="muted">No PDF page linked</span>}
             </span>
           </span>

@@ -149,7 +149,7 @@ function AboutView({ scope, overview }: { scope: ScopeResult; overview: Overview
         <Disclaimers items={[...disclaimers.values()]} />
         <p className="fine">
           Data version: comparison <a href={`${meta.source_repo}/tree/${meta.source_commit}`} target="_blank" rel="noopener">{meta.source_commit.slice(0, 7)}</a>,
-          built {date(meta.built_at)}. Every project nationwide: <External href={overview.url}>budget.bettergov.ph</External>.
+          built {date(meta.built_at)}. Four-program national comparison: <External href={overview.url}>budget.bettergov.ph</External>.
         </p>
       </section>
 

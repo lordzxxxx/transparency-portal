@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { External } from '../components/Bits';
 import { PageHead } from '../components/Chrome';
 import { shortNameOf } from '../config';
@@ -9,6 +10,10 @@ import { useTitle } from '../lib/use-title';
 
 export default function Sources() {
   const { config, scope, districts, client, retry } = usePortal();
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash === '#verify') document.getElementById('verify')?.scrollIntoView({ block: 'start' });
+  }, [hash]);
   const name = shortNameOf(config);
   useTitle(`Sources and context · ${name}`);
   const officeQueries = scope.status === 'ready' ? scope.value.queries.filter((q) => q.kind === 'office') : [];
@@ -25,6 +30,18 @@ export default function Sources() {
         </p>
       </PageHead>
 
+      <section id="verify" className="section source-method" aria-labelledby="verify-h">
+        <h2 id="verify-h" className="section-h">Verify a project in three steps</h2>
+        <ol>
+          <li><strong>Choose a line.</strong> Open a project in <Link to="/#projects">this portal’s ledger</Link>. Check why it is included and whether the status or match is marked uncertain.</li>
+          <li><strong>Read the source record.</strong> Open the BetterGov project page linked from its detail view. Compare the project title, program, office and amount with the portal.</li>
+          <li><strong>Check the document.</strong> Follow the NEP and House bill PDF links beside the amounts. Find the line on each linked page and compare the title, office and exact peso amount. The page number refers to its position in the PDF, which may differ from the printed page number. Read the <External href={METHODOLOGY_URL}>comparison methodology</External> before drawing a conclusion.</li>
+        </ol>
+        <p>“House bill only” means BetterGov has no matched NEP line for that House bill entry. It is a lead for review, not proof of an insertion or wrongdoing. These figures describe proposed appropriations, not actual spending.</p>
+        <Link className="button button-primary" to="/#projects">Choose a project to verify →</Link>
+        <p className="fine source-method-foot">The <External href={`${client.base}/docs`}>BetterGov Budget API documentation</External> explains the data. This is an independent, unofficial portal. <Link to="/about">Read the query and document notes →</Link></p>
+      </section>
+
       <section className="section" aria-labelledby="local-sources-h">
         <h2 id="local-sources-h" className="section-h">This office’s records</h2>
         {scope.status === 'loading' && <p className="state" role="status">Loading this office’s project count and API query…</p>}
@@ -40,7 +57,7 @@ export default function Sources() {
             <h3>Every line in this portal</h3>
             <p>Search {scope.status === 'ready' ? `the ${count(scope.value.projects.length)} project lines` : 'the project lines'}, compare the NEP and House bill amounts, and open either document at its page.</p>
             <Link to="/#projects">Browse the projects →</Link>
-            {officeQueries.map((q) => <External key={q.label} href={q.api}>Check the {q.label} API query</External>)}
+            {officeQueries.map((q) => <External key={q.label} href={q.api}>Open the {q.label} API results (JSON)</External>)}
           </article>
           <article className="source-card">
             <p className="label">District association · BetterGov</p>
@@ -102,16 +119,6 @@ export default function Sources() {
         </div>
       </section>
 
-      <section className="section source-method" aria-labelledby="verify-h">
-        <h2 id="verify-h" className="section-h">How to check a project claim</h2>
-        <ol>
-          <li>Find the line in <Link to="/#projects">this office’s project list</Link> and open its detail page.</li>
-          <li>Compare the NEP and House bill amounts and follow each available PDF page link.</li>
-          <li>Read the matching notes and the <External href={METHODOLOGY_URL}>BetterGov comparison methodology</External> before treating a difference as a finding.</li>
-        </ol>
-        <p>“House bill only” means a line appears in the compared House list and has no matched NEP line in this data. It is a candidate for review, not proof of an insertion or wrongdoing. PDF page references are positions in the linked file and may differ from numbers printed on the pages.</p>
-        <p className="fine">Data is served by the <External href={`${client.base}/docs`}>BetterGov Budget API</External>. This portal is independent and unofficial. <Link to="/about">Read its exact queries, documents and notices →</Link></p>
-      </section>
     </main>
   );
 }

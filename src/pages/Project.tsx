@@ -91,6 +91,18 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
         {p.labels.status.help && <p className="muted">{p.labels.status.help}</p>}
       </div>
 
+      <section className="project-verify" aria-labelledby="project-verify-h">
+        <div>
+          <p className="label">Verification guide</p>
+          <h2 id="project-verify-h">Check this line against BetterGov and the budget PDFs</h2>
+          <p>Confirm the title and listed office on BetterGov. Then open the PDF pages beside the amounts below and check each exact peso figure. Read the status and match notes before interpreting a difference.</p>
+        </div>
+        <div className="project-verify-actions">
+          <a className="button button-primary" href={p.url} target="_blank" rel="noopener">Open BetterGov project record ↗</a>
+          <Link to="/sources#verify">Read all verification steps →</Link>
+        </div>
+      </section>
+
       <div className="project-grid">
         <section aria-labelledby="amounts-h">
           <h2 id="amounts-h" className="section-h">Amount in each version, with the page it is on</h2>
@@ -105,7 +117,7 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
                     <th scope="row">{versionLabel(v)}</th>
                     <td className="num r" title={phpFull(amount)}>{amount == null ? <span className="muted">not listed</span> : phpFull(amount)}</td>
                     <td className="r">
-                      {pdf ? <External href={pdf}>{page ? `Page ${page}` : 'Open the document'}</External> : <span className="muted">—</span>}
+                      {pdf ? <External href={pdf}>{page ? `Open PDF · page ${page}` : 'Open source document'}</External> : <span className="muted">—</span>}
                     </td>
                   </tr>
                 );
@@ -169,9 +181,9 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
           </div>}
 
           <p className="small links">
-            <External href={p.url}>This project on budget.bettergov.ph</External>
+            <External href={p.url}>BetterGov project record</External>
             <br />
-            <External href={client.href(p.api_url)}>The API record (JSON)</External>
+            <External href={client.href(p.api_url)}>Source data for this project (JSON)</External>
           </p>
         </aside>
       </div>

@@ -98,7 +98,7 @@ export function Footer() {
             </span>
           </li>
           <li>
-            <span className="label">Every project, nationwide</span>
+            <span className="label">Four-program national comparison</span>
             <a href={NATIONAL_URL} target="_blank" rel="noopener">2027 House bill vs NEP ↗</a>
           </li>
           <li>
