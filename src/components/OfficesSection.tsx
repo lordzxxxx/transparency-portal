@@ -144,50 +144,54 @@ function Office({ view }: { view: OfficeView }) {
         <span className={`tag tier tier-${office.tier}`}>{office.tier_text}</span>
       </header>
 
-      <dl className="ocard-figs">
-        <div>
-          <dt className="label">In this portal</dt>
-          <dd>{lines ? <Link to={filter()} className="ocard-lines">{plural(lines, 'line')} →</Link> : <span className="muted">none</span>}</dd>
-        </div>
-        <div>
-          <dt className="label">NEP</dt>
-          <dd className="num">{php(f?.nep_php)}</dd>
-        </div>
-        <div>
-          <dt className="label">House bill</dt>
-          <dd className="num stat-accent">{php(f?.hgab3_php)}</dd>
-        </div>
-        <div>
-          <dt className="label">Change</dt>
-          <dd className="num">{phpDelta(change)}</dd>
-        </div>
-      </dl>
+      <div className="ocard-body">
+        <div className="ocard-main">
+          <dl className="ocard-figs">
+            <div>
+              <dt className="label">In this portal</dt>
+              <dd>{lines ? <Link to={filter()} className="ocard-lines">{plural(lines, 'line')} →</Link> : <span className="muted">none</span>}</dd>
+            </div>
+            <div>
+              <dt className="label">NEP</dt>
+              <dd className="num">{php(f?.nep_php)}</dd>
+            </div>
+            <div>
+              <dt className="label">House bill</dt>
+              <dd className="num stat-accent">{php(f?.hgab3_php)}</dd>
+            </div>
+            <div>
+              <dt className="label">Change</dt>
+              <dd className="num">{phpDelta(change)}</dd>
+            </div>
+          </dl>
 
-      {groups.length > 0 && (
-        <p className="ocard-groups">
-          {groups.map((c) => {
-            const text = <><span className={`status-dot g-${c.group}`} aria-hidden="true" />{count(c.rows)} {c.label.charAt(0).toLowerCase() + c.label.slice(1)}</>;
-            // These counts are the whole office's: link them only when all of its lines are in the portal.
-            return query ? <Link key={c.group} to={filter(c.group)}>{text}</Link> : <span key={c.group}>{text}</span>;
-          })}
-        </p>
-      )}
-      <p className="ocard-note">
-        Named projects{f ? <>: {count(f.nep_records)} in the NEP, {count(f.hgab3_records)} in the House bill</> : null}.
-        {wholeNep != null && <> The whole office in the NEP: {php(wholeNep)}.</>}
-        {unconfirmed > 0 && <> Includes {plural(unconfirmed, 'unconfirmed match', 'unconfirmed matches')} ({php(f?.annotations?.unconfirmed_php)}).</>}
-        {held > 0 && <> {plural(held, 'line')} whose two versions name different offices {held === 1 ? 'is' : 'are'} not in these figures.</>}{' '}
-        <Link to={`/gaa#${office.id}`}>Its budget each year since 2020 →</Link>
-      </p>
+          {groups.length > 0 && (
+            <p className="ocard-groups">
+              {groups.map((c) => {
+                const text = <><span className={`status-dot g-${c.group}`} aria-hidden="true" />{count(c.rows)} {c.label.charAt(0).toLowerCase() + c.label.slice(1)}</>;
+                // These counts are the whole office's: link them only when all of its lines are in the portal.
+                return query ? <Link key={c.group} to={filter(c.group)}>{text}</Link> : <span key={c.group}>{text}</span>;
+              })}
+            </p>
+          )}
+          <p className="ocard-note">
+            Named projects{f ? <>: {count(f.nep_records)} in the NEP, {count(f.hgab3_records)} in the House bill</> : null}.
+            {wholeNep != null && <> The whole office in the NEP: {php(wholeNep)}.</>}
+            {unconfirmed > 0 && <> Includes {plural(unconfirmed, 'unconfirmed match', 'unconfirmed matches')} ({php(f?.annotations?.unconfirmed_php)}).</>}
+            {held > 0 && <> {plural(held, 'line')} whose two versions name different offices {held === 1 ? 'is' : 'are'} not in these figures.</>}{' '}
+            <Link to={`/gaa#${office.id}`}>Its budget each year since 2020 →</Link>
+          </p>
+        </div>
 
-      <div className="ocard-districts">
-        <p className="label">
-          {districts.length === 1 ? 'Legislative district it serves' : `${districts.length} legislative districts it serves`}
-          {office.tier === 'B' && <> · shared, not split</>}
-        </p>
-        <ul>
-          {districts.map((d) => <District key={d.id} row={d} />)}
-        </ul>
+        <div className="ocard-districts">
+          <p className="label">
+            {districts.length === 1 ? 'Legislative district it serves' : `${districts.length} legislative districts it serves`}
+            {office.tier === 'B' && <> · shared, not split</>}
+          </p>
+          <ul>
+            {districts.map((d) => <District key={d.id} row={d} />)}
+          </ul>
+        </div>
       </div>
 
       {!query && office.projects_url && (

@@ -10,6 +10,7 @@ export default defineConfig({
   name: "Bukidnon 1st District Engineering Office",
   shortName: "Bukidnon 1st DEO",
   siteUrl: "https://transparency-portal-sable.vercel.app/",
+  buildYourOwnStrip: false,
   operator: {
     name: "ORVYX"
   },

@@ -129,25 +129,21 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
 
       <Stats summary={summary} programName={programName} />
 
-      <aside className="source-bridge" aria-label="Explore the national budget context">
-        <div>
-          <strong>How this office fits the national budget</strong>
-          <span>The figures above cover this DPWH office. BetterGov also publishes the nationwide proposal and House comparison.</span>
-        </div>
-        <div className="source-bridge-links">
-          <External href={NEP_OVERVIEW_URL}>2027 NEP</External>
-          <External href={NATIONAL_URL}>House bill vs NEP</External>
-          <Link to="/sources">Sources & context →</Link>
-        </div>
-      </aside>
-
-      <ReviewDesk projects={all} summary={summary} source={scope.meta} />
+      <nav className="jump-nav" aria-label="Explore this portal">
+        <Link to="/#projects"><strong>Browse all {count(summary.rows)} projects</strong><span>Search, filter and open source pages</span></Link>
+        {summary.groups.house_only.rows > 0 ? (
+          <Link to="/?status=house_only#projects"><strong>Review {count(summary.groups.house_only.rows)} House bill only lines</strong><span>Comparison candidates to check</span></Link>
+        ) : (
+          <Link to="/#groups"><strong>Compare project statuses</strong><span>See how the two versions relate</span></Link>
+        )}
+        <Link to="/gaa"><strong>View 2020–2026 budgets</strong><span>Whole office totals by year</span></Link>
+      </nav>
 
       <OfficesSection />
 
       <ProgramBreakdown projects={all} />
 
-      <section className="section" aria-labelledby="groups-h">
+      <section className="section" id="groups" aria-labelledby="groups-h">
         <h2 id="groups-h" className="section-h">What the House bill did to them</h2>
         <div className="groups" role="group" aria-label="Filter by status">
           {BRIDGE_GROUPS.map((g) => {
@@ -173,6 +169,8 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           })}
         </div>
       </section>
+
+      <ReviewDesk projects={all} summary={summary} source={scope.meta} />
 
       <section className="section" id="projects" aria-labelledby="list-h">
         <div className="list-head">
@@ -260,6 +258,18 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
           and the House bill are two versions of one budget: their totals are compared, never added.
         </p>
       </section>
+
+      <aside className="source-bridge" aria-label="Explore the national budget context">
+        <div>
+          <strong>How this office fits the national budget</strong>
+          <span>The figures above cover this DPWH office. BetterGov also publishes the nationwide proposal and House comparison.</span>
+        </div>
+        <div className="source-bridge-links">
+          <External href={NEP_OVERVIEW_URL}>2027 NEP</External>
+          <External href={NATIONAL_URL}>House bill vs NEP</External>
+          <Link to="/sources">Sources & context →</Link>
+        </div>
+      </aside>
 
       <Disclaimers items={disclaimers} compact />
     </>
@@ -403,8 +413,8 @@ function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
         {rows.map(([name, cell]) => (
           <div className="program-row" key={name}>
             <div><strong>{name}</strong><span className="muted small">{plural(cell.rows, 'project')}</span></div>
-            <div><span className="label">NEP · {count(cell.nepRows)} lines</span><strong className="num">{cell.nepRows ? php(cell.nep) : '—'}</strong></div>
-            <div><span className="label">House bill · {count(cell.houseRows)} lines</span><strong className="num">{cell.houseRows ? php(cell.house) : '—'}</strong></div>
+            <div><span className="label">NEP · {plural(cell.nepRows, 'line')}</span><strong className="num">{cell.nepRows ? php(cell.nep) : '—'}</strong></div>
+            <div><span className="label">House · {plural(cell.houseRows, 'line')}</span><strong className="num">{cell.houseRows ? php(cell.house) : '—'}</strong></div>
           </div>
         ))}
       </div>
