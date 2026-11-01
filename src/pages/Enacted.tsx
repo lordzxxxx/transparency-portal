@@ -62,7 +62,7 @@ export default function Enacted() {
       >
         <p>
           The General Appropriations Act (GAA) is the budget Congress passes and the President signs each year: the authority to
-          spend, not the money spent. These are the budgets for {FIRST} to {LAST}; the 2027 budget is still a bill.
+          spend, not the money spent. The Malaybalay program list below uses name matches, which can include work outside the city; the district office totals cover its entire service area. These are the budgets for {FIRST} to {LAST}; the 2027 budget is still a bill.
           {' '}<Link to="/sources">Compare the sources and budget stages →</Link>
         </p>
       </PageHead>
@@ -94,7 +94,7 @@ export default function Enacted() {
           <li>Amounts are the appropriations in each year’s GAA, in pesos. The GAA publishes them in thousands.</li>
           {places.length > 0 && (
             <>
-              <li>A program is listed when its name includes {placeList}. Names are matched, not places surveyed; a project whose name does not say where it is will not be here.</li>
+              <li>A program is listed when its name includes {placeList}. Names are matched, not places surveyed; this can include work outside the city and miss work whose name omits it. These are not verified city-only totals.</li>
               <li>One row is one name in one agency across the years. A renamed or re-scoped project shows as a new row. A dash means no appropriation under that name that year.</li>
             </>
           )}

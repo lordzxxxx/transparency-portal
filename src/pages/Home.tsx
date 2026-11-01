@@ -159,7 +159,7 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
-      {placeMatched && <p className="fine">This city view selects lines whose titles name Malaybalay in Region X. It may miss projects whose titles omit the city and may include projects outside city boundaries. These are proposed amounts on matched lines, not a complete city allocation or actual spending. <Link to="/about">See how lines are selected →</Link></p>}
+      {placeMatched && <p className="fine">This city view selects lines whose titles name Malaybalay in Region X. We excluded {count(scope.excluded.length)} lines whose titles explicitly place the work outside the city; <Link to="/about">each exclusion and its reason is public</Link>. The remaining title matches may still miss city projects or include uncertain locations. These are proposed amounts on selected lines, not a complete city allocation or actual spending.</p>}
       <p className="fine">These counts and totals are calculated from the project rows returned by the BetterGov API. {scope.queries[0] && <External href={scope.queries[0].api}>Check the API query</External>} {scope.queries.length > 1 && <Link to="/about">See every query</Link>} Check individual records and document pages in the ledger below. <Link to="/sources">Source guide →</Link></p>
 
       <nav className="jump-nav" aria-label="Explore this portal">

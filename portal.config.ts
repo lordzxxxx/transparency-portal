@@ -26,7 +26,23 @@ export default defineConfig({
     districts: [
       "leg:bukidnon:2nd"
     ],
-    exclude: []
+    exclude: [
+      { key: "dpwh:house-reading:2419", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:2421", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:9731", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
+      { key: "dpwh:house-reading:9733", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
+      { key: "dpwh:house-reading:9734", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears as the other endpoint." },
+      { key: "dpwh:house-reading:2230", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the section name." },
+      { key: "dpwh:house-reading:2416", reason: "The title places this road segment in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:2420", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:2413", reason: "The title places this road segment in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:2228", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the section name." },
+      { key: "dpwh:house-reading:2415", reason: "The title places this bridge in Gingoog City, Misamis Oriental; Malaybalay appears in the road name." },
+      { key: "dpwh:house-reading:2417", reason: "The title places this bridge in Claveria, Misamis Oriental; Malaybalay appears in the road name." },
+      { key: "dpwh:stage:16510", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
+      { key: "dpwh:stage:16511", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." },
+      { key: "dpwh:stage:16512", reason: "The title places this road segment in Impasug-ong, Bukidnon; Malaybalay appears in the road name." }
+    ]
   },
   reporting: {
     enabled: false

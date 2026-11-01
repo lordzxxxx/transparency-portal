@@ -45,7 +45,7 @@ writes `portal.config.ts`. Review the generated scope and the wording of any cus
 | **A project** (`/projects/:program/:id`) | The amount in every version with a link to the exact PDF page, how the two versions were matched, notes on the line, and why it is in this portal. |
 | **About the data** (`/about`) | Every question the portal asks the API, for 2027 and for 2020–2026, with counts and a link to check each one, every line removed by hand and why, the source documents, plain-language rules and terms, and the notices. |
 
-The public Malaybalay City deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its [custom-domain DNS record](docs/custom-domain.md) is documented separately. Vercel's `*.vercel.app` aliases require team sign-in under the project's current deployment protection setting.
+The public Malaybalay City deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its FY2027 title query excludes lines whose own titles explicitly place the work outside Malaybalay; every exclusion and reason appears on `/about`. The historical GAA list remains a name-match index, not city-only totals. Its [custom-domain DNS record](docs/custom-domain.md) is documented separately. Vercel's `*.vercel.app` aliases require team sign-in under the project's current deployment protection setting.
 
 ## How a portal decides which projects are its own
 
