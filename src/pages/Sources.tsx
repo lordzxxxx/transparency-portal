@@ -3,7 +3,7 @@ import { External } from '../components/Bits';
 import { PageHead } from '../components/Chrome';
 import { shortNameOf } from '../config';
 import { count, date } from '../lib/format';
-import { DPWH_COMPARISON_URL, DPWH_NEP_URL, GAA_2026_URL, GAA_OVERVIEW_URL, METHODOLOGY_URL, NATIONAL_URL, NEP_OVERVIEW_URL } from '../lib/links';
+import { DPWH_COMPARISON_URL, DPWH_NEP_URL, GAA_2026_URL, GAA_OVERVIEW_URL, HEARINGS_URL, METHODOLOGY_URL, NATIONAL_URL, NEP_OVERVIEW_URL } from '../lib/links';
 import { usePortal } from '../lib/portal-context';
 import { useTitle } from '../lib/use-title';
 
@@ -67,11 +67,12 @@ export default function Sources() {
       <section className="section" aria-labelledby="national-sources-h">
         <h2 id="national-sources-h" className="section-h">Nationwide context on BetterGov</h2>
         <p className="section-lede">These pages cover the country or all of DPWH. Their totals are broader than this office’s figures.</p>
-        <div className="source-grid">
+        <div className="source-grid source-grid-four">
           <article className="source-card">
             <p className="label">Executive proposal · FY 2027</p>
             <h3>National Expenditure Program</h3>
             <p>The proposed national budget by department, with the FY 2026 GAA baseline. This is the NEP overview you requested.</p>
+            <Link to="/context/nep">Read the sourced summary</Link>
             <External href={NEP_OVERVIEW_URL}>Open BetterGov’s 2027 NEP overview</External>
             <External href={DPWH_NEP_URL}>See DPWH in the national NEP</External>
           </article>
@@ -79,6 +80,7 @@ export default function Sources() {
             <p className="label">House bill comparison · FY 2027</p>
             <h3>House Bill 10858 against the NEP</h3>
             <p>BetterGov’s national comparison of the four project programs covered by the bill. This is the House budget overview you requested.</p>
+            <Link to="/context/house">Read the sourced summary</Link>
             <External href={NATIONAL_URL}>Open the House bill overview</External>
             <External href={DPWH_COMPARISON_URL}>Open the DPWH program comparison</External>
           </article>
@@ -86,8 +88,16 @@ export default function Sources() {
             <p className="label">Enacted budgets · FY 2020–2026</p>
             <h3>General Appropriations Acts</h3>
             <p>Browse national enacted appropriations by year and department. Appropriations are authority to spend, not proof of actual spending.</p>
+            <Link to="/context/gaa">See year-by-year national amounts</Link>
             <External href={GAA_OVERVIEW_URL}>Open BetterGov’s GAA browser</External>
             <External href={GAA_2026_URL}>Browse the enacted FY 2026 budget</External>
+          </article>
+          <article className="source-card">
+            <p className="label">Budget hearings · FY 2027</p>
+            <h3>House Committee DPWH sessions</h3>
+            <p>The BetterGov hearing API lists DPWH-wide sessions with topic records and source videos. A session listing does not show a Bukidnon-specific decision.</p>
+            <Link to="/context/hearings">See DPWH hearing records</Link>
+            <External href={HEARINGS_URL}>Open all BetterGov hearings</External>
           </article>
         </div>
       </section>

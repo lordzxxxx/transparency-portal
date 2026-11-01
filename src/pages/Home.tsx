@@ -6,6 +6,7 @@ import { shortNameOf, type DatasetKey } from '../config';
 import { Await, Disclaimers, External, ReasonTags, StatusChip } from '../components/Bits';
 import { PageHead } from '../components/Chrome';
 import OfficesSection from '../components/OfficesSection';
+import BetterGovHighlights from '../components/BetterGovHighlights';
 import { projectsCsv, downloadText } from '../lib/csv';
 import { count, date, php, phpDelta, plural } from '../lib/format';
 import { NATIONAL_URL, NEP_OVERVIEW_URL } from '../lib/links';
@@ -168,6 +169,8 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
         )}
         <Link to="/gaa"><strong>View 2020–2026 budgets</strong><span>Whole office totals by year</span></Link>
       </nav>
+
+      <BetterGovHighlights />
 
       <OfficesSection />
 

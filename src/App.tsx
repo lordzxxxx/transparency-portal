@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Project from './pages/Project';
 import Enacted from './pages/Enacted';
 import Sources from './pages/Sources';
+import NationalContext from './pages/NationalContext';
 
 export default function App() {
   const { config } = usePortal();
@@ -29,6 +30,8 @@ export default function App() {
         <Route path="/gaa" element={<Enacted />} />
         <Route path="/about" element={<About />} />
         <Route path="/sources" element={<Sources />} />
+        <Route path="/context" element={<NationalContext />} />
+        <Route path="/context/:section" element={<NationalContext />} />
         <Route path="/projects/:dataset/:id" element={<Project />} />
         <Route
           path="*"

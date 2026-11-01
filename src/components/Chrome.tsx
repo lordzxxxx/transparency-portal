@@ -4,6 +4,7 @@ import { KIND_LABELS, shortNameOf } from '../config';
 import { usePortal } from '../lib/portal-context';
 import { date } from '../lib/format';
 import { NATIONAL_URL, SOURCE_CODE_URL } from '../lib/links';
+import PhilippineClock from './PhilippineClock';
 
 const BETTERGOV_LOGO = '/brand/bettergov-horizontal-primary.png';
 
@@ -11,6 +12,7 @@ const NAV = [
   { to: '/', hash: '', label: '2027 projects' },
   { to: '/', hash: '#offices', label: 'Office & district' },
   { to: '/gaa', hash: '', label: 'Past budgets' },
+  { to: '/context', hash: '', label: 'National context' },
   { to: '/sources', hash: '', label: 'Sources' },
   { to: '/about', hash: '', label: 'About the data' },
 ];
@@ -37,15 +39,18 @@ export function Masthead() {
             <span className="masthead-name">{config.name}</span>
           </span>
         </Link>
-        <a className="masthead-with" href="https://bettergov.ph" target="_blank" rel="noopener">
-          <span className="label">Data from</span>
-          <img src={BETTERGOV_LOGO} alt="BetterGov.ph" width="128" height="28" />
-        </a>
+        <div className="masthead-aside">
+          <PhilippineClock />
+          <a className="masthead-with" href="https://bettergov.ph" target="_blank" rel="noopener">
+            <span className="label">Data from</span>
+            <img src={BETTERGOV_LOGO} alt="BetterGov.ph" width="128" height="28" />
+          </a>
+        </div>
       </div>
       <nav className="subnav" aria-label="Sections">
         <div className="page subnav-inner">
           {NAV.map((n) => {
-            const active = pathname === n.to && (n.hash ? hash === n.hash : hash !== '#offices');
+            const active = (pathname === n.to || (n.to === '/context' && pathname.startsWith('/context/'))) && (n.hash ? hash === n.hash : hash !== '#offices');
             return (
               <Link
                 key={n.label}

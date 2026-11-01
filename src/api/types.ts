@@ -77,6 +77,18 @@ export interface DocumentInfo {
   notes?: string;
 }
 
+export interface Hearing {
+  video_id: string;
+  title: string;
+  agency: string;
+  fiscal_year: string;
+  hearing_date: string;
+  page_url: string;
+  youtube_url: string;
+  topic_count: number;
+  has_record: boolean;
+}
+
 export interface RecordVersion { key: Version; short: string; label: string; plain: string }
 
 export interface Overview {

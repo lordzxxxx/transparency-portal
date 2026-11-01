@@ -7,5 +7,6 @@ export const NEP_OVERVIEW_URL = 'https://budget.bettergov.ph/2027/overview';
 export const DPWH_NEP_URL = 'https://budget.bettergov.ph/2027/d/18';
 export const DPWH_COMPARISON_URL = 'https://budget.bettergov.ph/hgab/2027/dpwh';
 export const GAA_OVERVIEW_URL = 'https://budget.bettergov.ph/gaa';
+export const HEARINGS_URL = 'https://budget.bettergov.ph/hearings';
 export const GAA_2026_URL = 'https://budget.bettergov.ph/gaa/2026';
 export const METHODOLOGY_URL = 'https://budget.bettergov.ph/hgab/2027/methodology';
