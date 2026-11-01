@@ -3,11 +3,11 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import type { BridgeGroup, DatasetInfo, Disclaimer, GroupInfo } from '../api/types';
 import { BRIDGE_GROUPS } from '../api/types';
 import { shortNameOf, type DatasetKey } from '../config';
-import { Await, Disclaimers, ReasonTags, StatusChip } from '../components/Bits';
+import { Await, Disclaimers, External, ReasonTags, StatusChip } from '../components/Bits';
 import { PageHead } from '../components/Chrome';
 import OfficesSection from '../components/OfficesSection';
 import { projectsCsv, downloadText } from '../lib/csv';
-import { count, php, phpDelta, plural } from '../lib/format';
+import { count, date, php, phpDelta, plural } from '../lib/format';
 import { usePortal } from '../lib/portal-context';
 import { summarise, type ScopedProject, type ScopeResult, type Summary } from '../lib/scope';
 import { useTitle } from '../lib/use-title';
@@ -128,7 +128,11 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
 
       <Stats summary={summary} programName={programName} />
 
+      <ReviewDesk projects={all} summary={summary} source={scope.meta} />
+
       <OfficesSection />
+
+      <ProgramBreakdown projects={all} />
 
       <section className="section" aria-labelledby="groups-h">
         <h2 id="groups-h" className="section-h">What the House bill did to them</h2>
@@ -274,8 +278,10 @@ function Lede({ summary }: { summary: Summary }) {
       {count(summary.house.rows)}, for {php(summary.house.php)}.{' '}
       {added || dropped ? (
         <>
-          {plural(added, 'project is', 'projects are')} in the House bill only and {count(dropped)} in the NEP only: candidates
-          to check, not confirmed changes.
+          {added > 0 && <>{plural(added, 'project is', 'projects are')} in the House bill only</>}
+          {added > 0 && dropped > 0 && <> and </>}
+          {dropped > 0 && <>{plural(dropped, 'project is', 'projects are')} in the NEP only</>}
+          : candidates to check, not confirmed changes.
         </>
       ) : (
         <>Every project is in both.</>
@@ -315,6 +321,85 @@ function Stats({ summary, programName }: { summary: Summary; programName: (k: Da
   );
 }
 
+function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; summary: Summary; source: ScopeResult['meta'] }) {
+  const candidates = projects
+    .filter((p) => p.bridge_group === 'house_only')
+    .sort((a, b) => (b.house_php ?? 0) - (a.house_php ?? 0))
+    .slice(0, 4);
+
+  return (
+    <section className="section review-desk" aria-labelledby="review-h">
+      <div className="review-intro">
+        <div>
+          <p className="eyebrow">Start with the source</p>
+          <h2 id="review-h" className="section-h">Read the changes, then check the document</h2>
+          <p>
+            The House bill lists {plural(summary.groups.house_only.rows, 'line')} absent from this office’s NEP list.
+            These are comparison candidates, not confirmed insertions or findings of wrongdoing.
+            Open a project to see both versions, its status notes, and the exact budget pages.
+          </p>
+        </div>
+        <div className="review-source">
+          <span className="label">Comparison data</span>
+          <strong>Built {date(source.built_at)}</strong>
+          <External href={`${source.source_repo}/tree/${source.source_commit}`}>Source data version</External>
+          <Link to="/about">How this portal selects lines →</Link>
+        </div>
+      </div>
+      {candidates.length > 0 && (
+        <>
+          <h3 className="sub-h">Largest House bill only lines in this office</h3>
+          <ol className="review-list">
+            {candidates.map((p) => (
+              <li key={p.key}>
+                <div>
+                  <Link className="project-title" to={`/projects/${p.dataset}/${encodeURIComponent(p.id)}`}>{p.title}</Link>
+                  <span className="muted small">{p.program ?? p.dataset.toUpperCase()}</span>
+                </div>
+                <div className="review-amount">
+                  <strong className="num">{php(p.house_php)}</strong>
+                  {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House bill p. {p.hgab3_page ?? 'PDF'}</External>}
+                </div>
+              </li>
+            ))}
+          </ol>
+          <Link className="review-all" to="/?status=house_only#projects">See all {count(summary.groups.house_only.rows)} House bill only lines →</Link>
+        </>
+      )}
+    </section>
+  );
+}
+
+function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
+  const programs = new Map<string, { rows: number; nep: number; nepRows: number; house: number; houseRows: number }>();
+  for (const p of projects) {
+    const key = p.program ?? 'Program not specified in the API';
+    const cell = programs.get(key) ?? { rows: 0, nep: 0, nepRows: 0, house: 0, houseRows: 0 };
+    cell.rows++;
+    if (p.nep_php != null) { cell.nep += p.nep_php; cell.nepRows++; }
+    if (p.house_php != null) { cell.house += p.house_php; cell.houseRows++; }
+    programs.set(key, cell);
+  }
+  if (programs.size < 2) return null;
+  const rows = [...programs.entries()].sort((a, b) => b[1].house - a[1].house || a[0].localeCompare(b[0]));
+  return (
+    <section className="section" aria-labelledby="programs-h">
+      <h2 id="programs-h" className="section-h">Projects by budget program</h2>
+      <p className="section-lede">Program names come from the BetterGov project records. Amounts compare the two 2027 versions for this office’s listed lines.</p>
+      <div className="program-breakdown">
+        {rows.map(([name, cell]) => (
+          <div className="program-row" key={name}>
+            <div><strong>{name}</strong><span className="muted small">{plural(cell.rows, 'project')}</span></div>
+            <div><span className="label">NEP · {count(cell.nepRows)} lines</span><strong className="num">{cell.nepRows ? php(cell.nep) : '—'}</strong></div>
+            <div><span className="label">House bill · {count(cell.houseRows)} lines</span><strong className="num">{cell.houseRows ? php(cell.house) : '—'}</strong></div>
+          </div>
+        ))}
+      </div>
+      <p className="fine">These are proposed allocations, not spending. The two versions are compared, never added.</p>
+    </section>
+  );
+}
+
 function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programName: (k: DatasetKey) => string }) {
   if (!rows.length) return null;
   return (
@@ -335,6 +420,8 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
               {p.office && <span>{shortOffice(p.office)}</span>}
               {p.region && <span>{p.region}</span>}
               <ReasonTags reasons={p.reasons} />
+              {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP p. {p.nep_page ?? 'PDF'}</External>}
+              {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House p. {p.hgab3_page ?? 'PDF'}</External>}
             </span>
           </span>
           <span role="cell" className="td-status"><StatusChip group={p.bridge_group} label={p.status_label} held={p.held} /></span>

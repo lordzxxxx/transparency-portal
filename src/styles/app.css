@@ -123,6 +123,28 @@
 .stat-accent { color: var(--accent); }
 .stat-sub { font-family: var(--font-mono); font-size: 11px; color: var(--ink-3); margin-top: 6px !important; line-height: 1.5; }
 
+/* ---------- Source-linked reading path ---------- */
+.review-desk { border: 1px solid var(--rule); border-top: 3px solid var(--accent); padding: 22px 24px; background: var(--paper-2); }
+.review-intro { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 32px; align-items: start; }
+.review-intro .eyebrow { margin-bottom: 6px; }
+.review-intro .section-h { margin-bottom: 8px; }
+.review-intro p:not(.eyebrow) { max-width: 760px; margin: 0; color: var(--ink-2); }
+.review-source { display: flex; flex-direction: column; gap: 5px; padding-left: 18px; border-left: 1px solid var(--rule); font-size: 13px; }
+.review-source strong { font-size: 14px; }
+.review-desk .sub-h { margin: 24px 0 8px; }
+.review-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+.review-list li { display: flex; justify-content: space-between; gap: 24px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.review-list li > div:first-child { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.review-amount { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; min-width: 120px; white-space: nowrap; font-size: 13px; }
+.review-amount strong { font-family: var(--font-hero); font-size: 18px; }
+.review-all { display: inline-block; margin-top: 12px; font-weight: 600; }
+.program-breakdown { border-top: 1px solid var(--ink); }
+.program-row { display: grid; grid-template-columns: minmax(0, 1fr) 150px 150px; gap: 18px; padding: 12px 0; border-bottom: 1px solid var(--rule-soft); align-items: start; }
+.program-row > div { display: flex; flex-direction: column; min-width: 0; gap: 3px; }
+.program-row > div:not(:first-child) { align-items: flex-end; text-align: right; }
+.program-row > div:first-child strong { font-weight: 600; }
+.program-row .num { font-family: var(--font-hero); font-size: 17px; }
+
 /* ---------- Sections ---------- */
 .section { margin: 0 0 40px; }
 .section-h {
@@ -398,8 +420,10 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
 .footer-inner { padding-top: 28px; padding-bottom: 40px; }
 .footer-source { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 12px; }
 .footer-notice { font-size: 12.5px; color: var(--ink-2); max-width: 900px; margin: 0 0 20px; line-height: 1.55; }
-.footer-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; font-size: 13.5px; }
+.footer-notice { overflow-wrap: anywhere; }
+.footer-links { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; font-size: 13.5px; }
 .footer-links li { display: flex; flex-direction: column; gap: 4px; }
+.footer-independent { margin: 24px 0 0; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 12px; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
@@ -417,6 +441,8 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
   .masthead-with .label { display: none; }
   .masthead-with img { height: 20px; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .review-intro { grid-template-columns: 1fr; gap: 18px; }
+  .review-source { padding: 0; border: 0; }
   .stats > div { padding-left: 0 !important; padding-right: 12px; border-right: none; }
   .stats > div:nth-child(-n + 2) { border-bottom: 1px solid var(--rule-soft); }
   .stat { font-size: 26px; }
@@ -455,6 +481,12 @@ code { font-family: var(--font-mono); font-size: 0.9em; background: var(--paper-
 }
 
 @media (max-width: 560px) {
+  .review-desk { padding: 18px; }
+  .review-list li { flex-direction: column; gap: 7px; }
+  .review-amount { align-items: flex-start; }
+  .program-row { grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .program-row > div:first-child { grid-column: 1 / -1; }
+  .program-row > div:not(:first-child) { align-items: flex-start; text-align: left; }
   .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .group-tile { border-right: 1px solid var(--rule) !important; }
   .group-tile:nth-child(2n) { border-right: none !important; }

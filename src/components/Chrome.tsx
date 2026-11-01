@@ -126,7 +126,12 @@ export function Footer() {
             <span className="label">Open source</span>
             <a href={SOURCE_CODE_URL} target="_blank" rel="noopener">Fork this portal for your LGU or DPWH office ↗</a>
           </li>
+          <li>
+            <span className="label">About BetterGov.ph</span>
+            <a href="https://about.bettergov.ph/" target="_blank" rel="noopener">The volunteer-led movement ↗</a>
+          </li>
         </ul>
+        <p className="footer-independent">Independent and unofficial. This portal is run by {config.operator.name}; the figures come from the BetterGov.ph Budget API. It is not a DPWH or government website.</p>
       </div>
     </footer>
   );
