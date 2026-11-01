@@ -20,4 +20,4 @@ vercel domains verify bettergov.transparency-portal.orvyx.online
 curl -I https://bettergov.transparency-portal.orvyx.online/
 ```
 
-Vercel should report a valid configuration and the HTTPS request should succeed. Check the current recommended DNS value in Vercel if the domain is ever removed and reattached. The old `transparency-portal-sable.vercel.app` address remains a fallback; its page metadata points to the custom domain.
+Vercel should report a valid configuration and the HTTPS request should succeed. Check the current recommended DNS value in Vercel if the domain is ever removed and reattached. The `transparency-portal-sable.vercel.app` alias points to this deployment but requires Vercel team sign-in under the project's current SSO protection. Use the custom domain for public links.
