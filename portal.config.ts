@@ -5,22 +5,18 @@
 import { defineConfig } from './src/config';
 
 export default defineConfig({
-  id: "malaybalay-city",
-  kind: "municipality",
-  name: "Municipality of Malaybalay city",
-  shortName: "Malaybalay city",
+  id: "bukidnon-1st-deo",
+  kind: "deo",
+  name: "Bukidnon 1st District Engineering Office",
+  shortName: "Bukidnon 1st DEO",
   operator: {
     name: "ORVYX"
   },
   scope: {
-    offices: [],
-    places: [
-      {
-        label: "Malaybalay city",
-        q: "Malaybalay city",
-        region: "X"
-      }
+    offices: [
+      "Bukidnon 1st District Engineering Office"
     ],
+    places: [],
     districts: [
       "leg:bukidnon:2nd"
     ],
