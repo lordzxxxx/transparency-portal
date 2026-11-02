@@ -21,3 +21,13 @@ curl -I https://bettergov.transparency-portal.orvyx.online/
 ```
 
 Vercel should report a valid configuration and the HTTPS request should succeed. Check the current recommended DNS value in Vercel if the domain is ever removed and reattached. The `transparency-portal-sable.vercel.app` alias points to this deployment but requires Vercel team sign-in under the project's current SSO protection. Use the custom domain for public links.
+
+## Bukidnon-wide portal
+
+The separate Vercel project `bukidnon-transparency-portal` uses `bukidnon.transparency-portal.orvyx.online`. In Hostinger's DNS zone for `orvyx.online`, add:
+
+| Type | Name/host | Target/value | TTL |
+| --- | --- | --- | --- |
+| CNAME | `bukidnon.transparency-portal` | `99cc987d0d00987b.vercel-dns-017.com.` | Default |
+
+Vercel supplied this project-specific target on 2 November 2026. Keep the original `bettergov.transparency-portal` record for the DEO portal. After the new record propagates, run `vercel domains verify bukidnon.transparency-portal.orvyx.online` and check the HTTPS page and its `/about` route. Recheck Vercel's recommended value if the hostname is ever detached and added again.

@@ -33,6 +33,15 @@ Add a custom domain in the Cloudflare dashboard (Workers → your worker → Dom
 Import the repository. `vercel.json` sets the Vite build, `dist/` and the rewrite to
 `index.html`.
 
+For this fork's two Bukidnon deployments, use separate Vercel projects connected to the same repository and `main` branch:
+
+| Project | Build-time setting | Config | Canonical host |
+| --- | --- | --- | --- |
+| Bukidnon 1st DEO | Leave `VITE_PORTAL_VARIANT` unset | `portal.config.ts` | `bettergov.transparency-portal.orvyx.online` |
+| Bukidnon-wide | Set `VITE_PORTAL_VARIANT=bukidnon` for Production and Preview | `portal.bukidnon.config.ts` | `bukidnon.transparency-portal.orvyx.online` |
+
+Run `npm run check` and `npm run check -- --config=portal.bukidnon.config.ts` before publishing either project. Each config carries its own canonical `siteUrl`. The Bukidnon-wide search combines office queries and title matches; `/about` publishes its selection rules and one excluded line. Do not describe its totals as all projects physically located in the province.
+
 ## Netlify
 
 Import the repository. `netlify.toml` sets the build and the 200 redirect to

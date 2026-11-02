@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import portalConfig from '../../portal.config';
+import bukidnonConfig from '../../portal.bukidnon.config';
 import { createClient } from '../api/client';
 import { DEFAULT_API } from '../config';
 import { PortalContext, type Async, type PortalState } from '../lib/portal-context';
@@ -35,7 +36,7 @@ function districtIds(scope: ScopeResult, configured: string[]): string[] {
 }
 
 export default function PortalProvider({ children }: { children: ReactNode }) {
-  const config = portalConfig;
+  const config = import.meta.env.VITE_PORTAL_VARIANT === 'bukidnon' ? bukidnonConfig : portalConfig;
   const client = useMemo(() => createClient(import.meta.env.VITE_API_BASE || config.api || DEFAULT_API), [config.api]);
   const [attempt, setAttempt] = useState(0);
 

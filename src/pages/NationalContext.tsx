@@ -17,7 +17,7 @@ type ContextData = HearingResponse | NepResponse | HouseResponse | GaaResponse;
 type Section = 'nep' | 'house' | 'hearings' | 'gaa';
 
 const sections: { key: Section; title: string; eyebrow: string; description: string; source: string; api: string }[] = [
-  { key: 'nep', title: '2027 executive proposal', eyebrow: 'National Expenditure Program', description: 'The nationwide NEP and its DPWH department entry. These totals cover much more than Bukidnon 1st DEO.', source: NEP_OVERVIEW_URL, api: '/api/v1/nep/2027' },
+  { key: 'nep', title: '2027 executive proposal', eyebrow: 'National Expenditure Program', description: 'The nationwide NEP and its DPWH department entry. These totals cover more than the project lines selected by this portal.', source: NEP_OVERVIEW_URL, api: '/api/v1/nep/2027' },
   { key: 'house', title: 'House bill comparison', eyebrow: 'House Bill 10858 versus the NEP', description: 'BetterGov compares project lines in four programs. Candidate changes need source review.', source: NATIONAL_URL, api: '/api/v1/hgab/2027' },
   { key: 'hearings', title: 'DPWH budget hearings', eyebrow: 'House Committee on Appropriations', description: 'DPWH-wide hearing streams, topic records and source videos. They do not establish a Bukidnon-specific decision.', source: HEARINGS_URL, api: '/api/v1/hearings?agency=DPWH' },
   { key: 'gaa', title: 'Enacted national budgets', eyebrow: 'General Appropriations Acts · 2020–2026', description: 'Nationwide enacted appropriations by year. These amounts are not spending or office totals.', source: GAA_OVERVIEW_URL, api: '/api/v1/gaa' },
@@ -56,8 +56,8 @@ export default function NationalContext() {
       {!selected ? (
         <>
           <section className="section" aria-labelledby="local-context-h">
-            <h2 className="section-h" id="local-context-h">Start with Bukidnon 1st DEO</h2>
-            <p>The local ledger is drawn from BetterGov’s comparison data, built {scope.status === 'ready' ? date(scope.value.meta.built_at) : 'on the date shown in its source record'}. The date is the dataset build time, not a live spending update. <Link to="/#projects">Review this office’s project lines →</Link></p>
+            <h2 className="section-h" id="local-context-h">Start with {name}</h2>
+            <p>The local ledger is drawn from BetterGov’s comparison data, built {scope.status === 'ready' ? date(scope.value.meta.built_at) : 'on the date shown in its source record'}. The date is the dataset build time, not a live spending update. <Link to="/#projects">Review this portal’s project lines →</Link></p>
           </section>
           <div className="context-grid">
             {sections.map((item) => <article className="context-card" key={item.key}>
@@ -91,7 +91,7 @@ function ContextDetails({ section, data }: { section: Section; data: ContextData
         <div><dt>2027 NEP, nationwide</dt><dd>{php(record.data.national.amount)}</dd></div>
         {dpwh && <div><dt>DPWH in the 2027 NEP</dt><dd>{php(dpwh.amount)}</dd></div>}
       </dl>
-      <p className="fine">{record.meta.generated_at && <>API dataset generated {date(record.meta.generated_at)}. </>}The DPWH department total is broader than this office’s listed projects. <External href={DPWH_NEP_URL}>Explore the national DPWH page</External> · <Link to="/gaa">See this office’s yearly amounts</Link>.</p>
+      <p className="fine">{record.meta.generated_at && <>API dataset generated {date(record.meta.generated_at)}. </>}The DPWH department total is broader than this portal’s selected projects. <External href={DPWH_NEP_URL}>Explore the national DPWH page</External> · <Link to="/gaa">See the selected offices’ yearly amounts</Link>.</p>
     </section>;
   }
   if (section === 'house') {
@@ -100,7 +100,7 @@ function ContextDetails({ section, data }: { section: Section; data: ContextData
       <h2 className="section-h">Scope of the comparison</h2>
       <p>{record.data.summary}</p>
       <ul className="context-list">{record.data.datasets.map((item) => <li key={item.key}>{item.label}</li>)}</ul>
-      <p className="fine">Comparison data built {date(record.meta.built_at)}. <External href={DPWH_COMPARISON_URL}>Explore all DPWH records</External> · <Link to="/">See Bukidnon 1st DEO only</Link>. A candidate status alone is not evidence of wrongdoing.</p>
+      <p className="fine">Comparison data built {date(record.meta.built_at)}. <External href={DPWH_COMPARISON_URL}>Explore all DPWH records</External> · <Link to="/">See this portal’s selected lines</Link>. A candidate status alone is not evidence of wrongdoing.</p>
     </section>;
   }
   if (section === 'hearings') {
@@ -119,6 +119,6 @@ function ContextDetails({ section, data }: { section: Section; data: ContextData
   return <section className="section context-detail">
     <h2 className="section-h">National enacted appropriations</h2>
     <div className="context-years">{years.map((item) => <div key={item.year}><span>{item.year}</span><strong>{php(item.amount)}</strong><External href={`https://budget.bettergov.ph/gaa/${item.year}`}>Year page</External></div>)}</div>
-    <p className="fine">These national GAA amounts are authority to spend, not actual expenditure. <Link to="/gaa">View Bukidnon 1st DEO’s office totals →</Link></p>
+    <p className="fine">These national GAA amounts are authority to spend, not actual expenditure. <Link to="/gaa">View this portal’s office totals →</Link></p>
   </section>;
 }

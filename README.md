@@ -47,6 +47,8 @@ writes `portal.config.ts`. Review the generated scope and the wording of any cus
 
 The public Bukidnon 1st DEO deployment uses [bettergov.transparency-portal.orvyx.online](https://bettergov.transparency-portal.orvyx.online/). Its FY2027 ledger queries the named DPWH district engineering office; it is not a city-only budget. Earlier GAA figures cover the whole office. The [custom-domain DNS record](docs/custom-domain.md) is documented separately. Vercel's `*.vercel.app` aliases require team sign-in under the project's current deployment protection setting.
 
+This fork also has a separate Bukidnon-wide configuration in `portal.bukidnon.config.ts`. It selects four Bukidnon DPWH offices and titles naming Bukidnon. It is a search-based view, not a complete geographic inventory: title matches do not prove location, and projects without Bukidnon in the title can be missed. One Cagayan de Oro DEO road line is excluded with its reason published on `/about`; two BetterGov `scope_review` lines remain visible with their uncertainty labels. Build this variant with `VITE_PORTAL_VARIANT=bukidnon npm run build` and check it with `npm run check -- --config=portal.bukidnon.config.ts`. See [the two-deployment setup](docs/deploy.md).
+
 ## How a portal decides which projects are its own
 
 The scope in `portal.config.ts` has three parts. A project is in the portal for one or

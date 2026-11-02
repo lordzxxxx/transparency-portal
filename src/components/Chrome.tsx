@@ -101,6 +101,16 @@ export function Footer() {
             <span className="label">Four-program national comparison</span>
             <a href={NATIONAL_URL} target="_blank" rel="noopener">2027 House bill vs NEP ↗</a>
           </li>
+          {(config.id === 'bukidnon-1st-deo' || config.id === 'bukidnon') && (
+            <li>
+              <span className="label">Related local portal</span>
+              {config.id === 'bukidnon-1st-deo' ? (
+                <a href="https://bukidnon.transparency-portal.orvyx.online/">Bukidnon-wide records ↗</a>
+              ) : (
+                <a href="https://bettergov.transparency-portal.orvyx.online/">Bukidnon 1st DEO records ↗</a>
+              )}
+            </li>
+          )}
           <li>
             <span className="label">Data</span>
             <a href={`${client.base}/docs`} target="_blank" rel="noopener">Budget API and MCP ↗</a>

@@ -24,8 +24,8 @@ export default function Sources() {
     <main className="page main">
       <PageHead eyebrow={<>Source guide<span className="sep">·</span>{name}</>} title="Follow each figure back to its source">
         <p>
-          This portal lists projects attributed to {name} in the BetterGov.ph Budget API. The links below separate this
-          office’s records from nationwide budget views. A proposal, a House bill and an enacted budget are different stages;
+          This portal lists project lines selected for {name} from the BetterGov.ph Budget API. The links below separate this
+          portal’s records from nationwide budget views. A proposal, a House bill and an enacted budget are different stages;
           their amounts should be read in context, not combined.
         </p>
       </PageHead>
@@ -43,11 +43,11 @@ export default function Sources() {
       </section>
 
       <section className="section" aria-labelledby="local-sources-h">
-        <h2 id="local-sources-h" className="section-h">This office’s records</h2>
-        {scope.status === 'loading' && <p className="state" role="status">Loading this office’s project count and API query…</p>}
+        <h2 id="local-sources-h" className="section-h">Records selected for this portal</h2>
+        {scope.status === 'loading' && <p className="state" role="status">Loading the project count and API queries…</p>}
         {scope.status === 'error' && (
           <div className="state state-error" role="alert">
-            <p><strong>Could not load this office’s source links.</strong> {scope.error.message}</p>
+            <p><strong>Could not load the source links.</strong> {scope.error.message}</p>
             <button type="button" className="button" onClick={retry}>Try again</button>
           </div>
         )}
@@ -62,15 +62,15 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">District association · BetterGov</p>
             <h3>Office and legislative district</h3>
-            <p>BetterGov associates this office with {districtPages.map((d) => d.label).join('; ') || 'a legislative district'}. {config.kind === 'deo' && <>An office’s number need not match a legislative district number. </>}This association does not assign every project to a specific place or representative.</p>
+            <p>{config.kind === 'deo' ? 'BetterGov associates this office with' : 'The selected offices are associated with'} {districtPages.map((d) => d.label).join('; ') || 'a legislative district'}. {config.kind === 'deo' && <>An office’s number need not match a legislative district number. </>}These associations do not assign every project to a specific place or representative.</p>
             <Link to="/#offices">See this portal’s office card →</Link>
             {districtPages.map((d) => <External key={d.id} href={d.url}>{d.label} on BetterGov</External>)}
           </article>
           <article className="source-card">
             <p className="label">2020–2026 · enacted budgets</p>
             <h3>Earlier office totals</h3>
-            <p>See this office’s whole yearly GAA amounts as reported by the BetterGov district API. It does not provide an original GAA PDF page for each office-year total. The GAA project records cannot be reliably assigned to this office line by line.</p>
-            <Link to="/gaa">View the office’s yearly budgets →</Link>
+            <p>See each selected office’s whole yearly GAA amounts as reported by the BetterGov district API. It does not provide an original GAA PDF page for each office-year total. GAA project records cannot be reliably assigned to a specific office line by line.</p>
+            <Link to="/gaa">View the offices’ yearly budgets →</Link>
             {districtPages.map((d) => <External key={d.id} href={client.href(`/districts/${encodeURIComponent(d.id)}`)}>Inspect the district API record</External>)}
           </article>
         </div>
@@ -83,12 +83,12 @@ export default function Sources() {
 
       <section className="section" aria-labelledby="national-sources-h">
         <h2 id="national-sources-h" className="section-h">Nationwide context on BetterGov</h2>
-        <p className="section-lede">These pages cover the country or all of DPWH. Their totals are broader than this office’s figures.</p>
+        <p className="section-lede">These pages cover the country or all of DPWH. Their totals are broader than this portal’s figures.</p>
         <div className="source-grid source-grid-four">
           <article className="source-card">
             <p className="label">Executive proposal · FY 2027</p>
             <h3>National Expenditure Program</h3>
-            <p>The proposed national budget by department, with the FY 2026 GAA baseline. Its totals cover the whole country, not this office alone.</p>
+            <p>The proposed national budget by department, with the FY 2026 GAA baseline. Its totals cover the whole country, not this portal’s selected lines alone.</p>
             <Link to="/context/nep">Read the sourced summary</Link>
             <External href={NEP_OVERVIEW_URL}>Open BetterGov’s 2027 NEP overview</External>
             <External href={DPWH_NEP_URL}>See DPWH in the national NEP</External>
@@ -96,7 +96,7 @@ export default function Sources() {
           <article className="source-card">
             <p className="label">House bill comparison · FY 2027</p>
             <h3>House Bill 10858 against the NEP</h3>
-            <p>BetterGov’s national comparison of the four project programs covered by the bill. These nationwide figures are broader than this office’s ledger.</p>
+            <p>BetterGov’s national comparison of the four project programs covered by the bill. These nationwide figures are broader than this portal’s ledger.</p>
             <Link to="/context/house">Read the sourced summary</Link>
             <External href={NATIONAL_URL}>Open the House bill overview</External>
             <External href={DPWH_COMPARISON_URL}>Open the DPWH program comparison</External>

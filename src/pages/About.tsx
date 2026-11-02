@@ -54,7 +54,7 @@ function AboutView({ scope, overview }: { scope: ScopeResult; overview: Overview
       >
         <p>
           Project amounts, labels and document links come from the BetterGov.ph Budget API, which sets the House bill against the NEP project by project.
-          This portal asks the API the questions below, shows every line it gets back, and calculates the displayed counts and totals from those lines.
+          This portal asks the API the questions below, publishes any exclusions with reasons, and calculates the displayed counts and totals from the retained lines.
           {' '}<Link to="/sources">See how these sources relate to the national budget →</Link>
         </p>
       </PageHead>

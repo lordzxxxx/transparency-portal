@@ -152,10 +152,11 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
     <>
       <PageHead
         eyebrow={<>FY 2027<span className="sep">·</span>NEP and House Bill 10858<span className="sep">·</span>{name}</>}
-        title={config.kind === 'deo' ? `${plural(summary.rows, 'project')} listed under ${name}` : `${plural(summary.rows, 'project')} for ${name} in the 2027 budget`}
+        title={config.kind === 'deo' ? `${plural(summary.rows, 'project')} listed under ${name}` : `${plural(summary.rows, 'project')} associated with ${name}`}
       >
         <Lede summary={summary} />
         {config.kind === 'deo' && <p>BetterGov attributes these lines to this DPWH office. The office name does not establish a project’s exact location. The NEP and House bill are proposals, not records of spending. <Link to="/sources#verify">How to verify a figure →</Link></p>}
+        {config.kind === 'province' && <p>These are BetterGov lines listed under the selected DPWH offices or found because their titles name Bukidnon. A title match alone does not establish that a project is within the province, and projects that do not name Bukidnon may be absent. The NEP and House bill are proposals, not spending records. <Link to="/about">See the exact selection rules and exclusions →</Link></p>}
       </PageHead>
 
       <Stats summary={summary} programName={programName} />
@@ -324,8 +325,8 @@ function Projects({ scope, datasets }: { scope: ScopeResult; datasets: DatasetIn
 
       <aside className="source-bridge" aria-label="Explore the national budget context">
         <div>
-          <strong>How this office fits the national budget</strong>
-          <span>The figures above cover this DPWH office. BetterGov also publishes the nationwide proposal and House comparison.</span>
+          <strong>How this portal’s scope fits the national budget</strong>
+          <span>The figures above cover this portal’s selected lines. BetterGov also publishes the nationwide proposal and House comparison.</span>
         </div>
         <div className="source-bridge-links">
           <External href={NEP_OVERVIEW_URL}>2027 NEP</External>
@@ -420,7 +421,7 @@ function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; 
           <p className="eyebrow">Start with the source</p>
           <h2 id="review-h" className="section-h">Read the changes, then check the document</h2>
           <p>
-            The House bill lists {plural(summary.groups.house_only.rows, 'line')} absent from this office’s NEP list.
+            The House bill lists {plural(summary.groups.house_only.rows, 'line')} without a matched NEP line in this portal’s selected records.
             These are comparison candidates, not confirmed insertions or findings of wrongdoing.
             Open a project to see both versions, its status notes, and the exact budget pages.
           </p>
@@ -434,7 +435,7 @@ function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; 
       </div>
       {candidates.length > 0 && (
         <>
-          <h3 className="sub-h">Largest House bill only lines in this office</h3>
+          <h3 className="sub-h">Largest House bill only lines in this portal</h3>
           <ol className="review-list">
             {candidates.map((p) => (
               <li key={p.key}>
@@ -471,7 +472,7 @@ function ProgramBreakdown({ projects }: { projects: ScopedProject[] }) {
   return (
     <section className="section" aria-labelledby="programs-h">
       <h2 id="programs-h" className="section-h">Projects by budget program</h2>
-      <p className="section-lede">Program names come from the BetterGov project records. Amounts compare the two 2027 versions for this office’s listed lines.</p>
+      <p className="section-lede">Program names come from the BetterGov project records. Amounts compare the two 2027 versions for the lines selected by this portal.</p>
       <div className="program-breakdown">
         {rows.map(([name, cell]) => (
           <div className="program-row" key={name}>
