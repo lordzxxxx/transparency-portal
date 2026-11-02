@@ -7,6 +7,7 @@ import { phpDelta, phpFull } from '../lib/format';
 import { usePortal, type Async } from '../lib/portal-context';
 import { projectKey } from '../lib/scope';
 import { reportHref } from '../lib/report';
+import { sourcePdfPage } from '../lib/links';
 import { useTitle } from '../lib/use-title';
 
 const VERSIONS: Version[] = ['nep', 'hgab2', 'hgab3', 'api'];
@@ -111,7 +112,7 @@ function ProjectView({ env }: { env: Envelope<ProjectDetail> }) {
               {versions.map((v) => {
                 const amount = p[`${v}_php` as const];
                 const pdf = p.pdf_url[v];
-                const page = v === 'api' ? null : p[`${v}_page` as const];
+                const page = v === 'api' ? null : sourcePdfPage(p[`${v}_page` as const], pdf);
                 return (
                   <tr key={v}>
                     <th scope="row">{versionLabel(v)}</th>

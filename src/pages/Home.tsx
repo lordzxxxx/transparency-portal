@@ -9,7 +9,7 @@ import OfficesSection from '../components/OfficesSection';
 import BetterGovHighlights from '../components/BetterGovHighlights';
 import { projectsCsv, downloadText } from '../lib/csv';
 import { count, date, php, phpDelta, plural } from '../lib/format';
-import { NATIONAL_URL, NEP_OVERVIEW_URL } from '../lib/links';
+import { NATIONAL_URL, NEP_OVERVIEW_URL, sourcePdfPage } from '../lib/links';
 import { usePortal } from '../lib/portal-context';
 import { summarise, type ScopedProject, type ScopeResult, type Summary } from '../lib/scope';
 import { useTitle } from '../lib/use-title';
@@ -445,7 +445,7 @@ function ReviewDesk({ projects, summary, source }: { projects: ScopedProject[]; 
                 </div>
                 <div className="review-amount">
                   <strong className="num">{php(p.house_php)}</strong>
-                  {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House bill p. {p.hgab3_page ?? 'PDF'}</External>}
+                  {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House bill p. {sourcePdfPage(p.hgab3_page, p.pdf_url.hgab3) ?? 'PDF'}</External>}
                 </div>
               </li>
             ))}
@@ -510,8 +510,8 @@ function ProjectTable({ rows, programName }: { rows: ScopedProject[]; programNam
             </span>
             <span className="source-pages">
               <Link className="verify-link" to={`/projects/${p.dataset}/${encodeURIComponent(p.id)}`}>Verify this project →</Link>
-              {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP PDF, page {p.nep_page ?? 'unknown'}</External>}
-              {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House PDF, page {p.hgab3_page ?? 'unknown'}</External>}
+              {p.pdf_url.nep && <External href={p.pdf_url.nep}>NEP PDF, page {sourcePdfPage(p.nep_page, p.pdf_url.nep) ?? 'unknown'}</External>}
+              {p.pdf_url.hgab3 && <External href={p.pdf_url.hgab3}>House PDF, page {sourcePdfPage(p.hgab3_page, p.pdf_url.hgab3) ?? 'unknown'}</External>}
               {!p.pdf_url.nep && !p.pdf_url.hgab3 && <span className="muted">No PDF page linked</span>}
             </span>
           </span>

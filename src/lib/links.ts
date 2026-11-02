@@ -10,3 +10,10 @@ export const GAA_OVERVIEW_URL = 'https://budget.bettergov.ph/gaa';
 export const HEARINGS_URL = 'https://budget.bettergov.ph/hearings';
 export const GAA_2026_URL = 'https://budget.bettergov.ph/gaa/2026';
 export const METHODOLOGY_URL = 'https://budget.bettergov.ph/hgab/2027/methodology';
+
+/** Some BetterGov rows have a PDF #page target even when the separate page field is null. */
+export function sourcePdfPage(page: number | null, url: string | undefined | null): number | null {
+  if (page != null) return page;
+  const target = url?.match(/#page=(\d+)(?:&|$)/)?.[1];
+  return target ? Number(target) : null;
+}

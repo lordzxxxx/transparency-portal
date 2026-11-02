@@ -19,6 +19,7 @@ import { resolveScope, summarise } from '../src/lib/scope.ts';
 import { departmentShort, gaaYearTotals, resolveGaa } from '../src/lib/gaa.ts';
 import { GAA_YEARS, type GaaEnvelope } from '../src/api/types.ts';
 import { count, php, plural } from '../src/lib/format.ts';
+import { sourcePdfPage } from '../src/lib/links.ts';
 
 const verbose = argv.includes('--verbose');
 // --config=examples/deo.config.ts checks another file; default portal.config.ts.
@@ -65,13 +66,14 @@ async function main() {
     if (rows.length !== q.total) problems.push(`office "${q.label}": fetched ${rows.length} lines but the API reports ${q.total}.`);
     if (nep !== (q.sums.nep_php ?? 0)) problems.push(`office "${q.label}": NEP rows total ${php(nep)}, API reports ${php(q.sums.nep_php)}.`);
     if (house !== (q.sums.hgab3_php ?? 0)) problems.push(`office "${q.label}": House rows total ${php(house)}, API reports ${php(q.sums.hgab3_php)}.`);
-    for (const row of rows) {
-      if (!row.url || !row.api_url) problems.push(`${row.key}: missing BetterGov project or API record link.`);
-      if (row.nep_php != null && (!row.pdf_url.nep || !row.nep_page)) problems.push(`${row.key}: NEP amount has no linked PDF page.`);
-      if (row.house_php != null && (!row.pdf_url.hgab3 || !row.hgab3_page)) problems.push(`${row.key}: House amount has no linked PDF page.`);
-    }
-    console.log(`  reconciled ${count(rows.length)} office lines and their NEP/House amounts with the API; checked source and PDF page link fields`);
+    console.log(`  reconciled ${count(rows.length)} office lines and their NEP/House amounts with the API`);
   }
+  for (const row of allSelected) {
+    if (!row.url || !row.api_url) problems.push(`${row.key}: missing BetterGov project or API record link.`);
+    if (row.nep_php != null && (!row.pdf_url.nep || !sourcePdfPage(row.nep_page, row.pdf_url.nep))) problems.push(`${row.key}: NEP amount has no linked PDF page.`);
+    if (row.house_php != null && (!row.pdf_url.hgab3 || !sourcePdfPage(row.hgab3_page, row.pdf_url.hgab3))) problems.push(`${row.key}: House amount has no linked PDF page.`);
+  }
+  console.log(`  checked project record and PDF page link fields for all ${count(allSelected.length)} selected lines`);
 
   // Lines found only by name, under a DPWH office outside the scope: often right
   // (a Central Office project in the place), sometimes a namesake elsewhere.
