@@ -105,7 +105,7 @@ export function Footer() {
             <li>
               <span className="label">Related local portal</span>
               {config.id === 'bukidnon-1st-deo' ? (
-                <a href="https://bukidnon.transparency-portal.orvyx.online/">Bukidnon-wide records ↗</a>
+                <a href="https://bukidnon-transparency-portal.vercel.app/">Bukidnon-wide records ↗</a>
               ) : (
                 <a href="https://bettergov.transparency-portal.orvyx.online/">Bukidnon 1st DEO records ↗</a>
               )}

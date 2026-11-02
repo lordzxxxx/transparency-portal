@@ -6,7 +6,7 @@ export default defineConfig({
   kind: "province",
   name: "Province of Bukidnon",
   shortName: "Bukidnon",
-  siteUrl: "https://bukidnon.transparency-portal.orvyx.online/",
+  siteUrl: "https://bukidnon-transparency-portal.vercel.app/",
   buildYourOwnStrip: false,
   operator: {
     name: "ORVYX"
